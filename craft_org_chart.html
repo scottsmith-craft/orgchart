@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Craft Org Chart 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#F0F4F8;overflow:hidden;height:100vh;}
+  button{font-family:inherit;}
+  input{font-family:inherit;}
+  ::-webkit-scrollbar{width:6px;height:6px;}
+  ::-webkit-scrollbar-track{background:transparent;}
+  ::-webkit-scrollbar-thumb{background:#C8D5E0;border-radius:3px;}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const{useState,useRef,useCallback,useEffect}=React;
+
+const BRAND={navy:"#002855",blue:"#0070F0",lime:"#97E152",sky:"#46B1EF",gray:"#E3E3E3",white:"#FFFFFF",canvas:"#F0F4F8",textMuted:"#6B7A90"};
+const DEPT_COLORS={"Leadership":"#002855","Product & Technology":"#E05C1A","Product Management":"#46B1EF","Technology":"#005FA3","Business Operations":"#1A9E6B","Craft Intelligence":"#5C7AEA","Business Development":"#C0392B","Customer Success":"#27AE60","Partnership Development":"#8E44AD","Workforce Partnership":"#2980B9","Instructional Innovation":"#16A085","Workforce & WIOA":"#D35400","Craft Consulting":"#7D6608","Marketing":"#B03060","Grant Administration":"#7F8C8D","Solution Engineering":"#117864","People & Talent":"#1A5276","Finance":"#784212","Legal":"#4A235A"};
+const dc=d=>DEPT_COLORS[d]||BRAND.textMuted;
+
+const RAW=[
+  {name:"Mallory Dwinal-Palisch",title:"President",manager:null,dept:"Leadership",loc:"Nashville Office",tz:"CT"},
+  {name:"Myka Smith",title:"Senior People & Talent Business Partner",manager:"Mallory Dwinal-Palisch",dept:"People & Talent",loc:"SLC Office",tz:"MT",wgu:true},
+  {name:"Justin Larsen",title:"Senior Financial Analyst",manager:"Mallory Dwinal-Palisch",dept:"Finance",loc:"SLC Office",tz:"MT",wgu:true},
+  {name:"Mike Henochowicz",title:"Senior Staff Attorney",manager:"Mallory Dwinal-Palisch",dept:"Legal",loc:"SLC Office",tz:"MT",wgu:true},
+  {name:"Adam Davis",title:"Chief Operating Officer",manager:"Mallory Dwinal-Palisch",dept:"Leadership",loc:"SLC Office",tz:"MT"},
+  {name:"Kymberly Lavigne-Hinkley",title:"Chief Development Officer",manager:"Mallory Dwinal-Palisch",dept:"Leadership",loc:"Remote",tz:"ET"},
+  {name:"Marté Williams",title:"Executive Assistant",manager:"Mallory Dwinal-Palisch",dept:"Leadership",loc:"Nashville Office",tz:"CT"},
+  {name:"Patty Moore",title:"Vice President, Engineering",manager:"Adam Davis",dept:"Product & Technology",loc:"SLC Office",tz:"MT"},
+  {name:"Melinda Perez",title:"Senior Manager, Business Operations",manager:"Adam Davis",dept:"Business Operations",loc:"Remote",tz:"ET"},
+  {name:"Patricia Saenz-Armstrong",title:"Senior Manager, Data and Research Initiatives",manager:"Adam Davis",dept:"Craft Intelligence",loc:"Remote",tz:"ET"},
+  {name:"TBH 2",title:"Director, Business Development",manager:"Adam Davis",dept:"Business Development",loc:"Nashville Office",tz:"CT",tbh:true},
+  {name:"TBH 1",title:"Director, Customer Success & Strategic Implementation",manager:"Adam Davis",dept:"Customer Success",loc:"Nashville Office",tz:"CT",tbh:true},
+  {name:"Amani Ariel-Wamala",title:"Director, Technical Product Management",manager:"Patty Moore",dept:"Product Management",loc:"Remote",tz:"ET"},
+  {name:"Jerry Jasperson",title:"Senior Director, Technology",manager:"Patty Moore",dept:"Technology",loc:"Remote",tz:"MT"},
+  {name:"Kristin Eller",title:"Grant Administration Lead",manager:"Patty Moore",dept:"Grant Administration",loc:"Nashville Office",tz:"CT"},
+  {name:"Alex Mendiola",title:"Staff Software Product Manager",manager:"Amani Ariel-Wamala",dept:"Product Management",loc:"Remote",tz:"ET"},
+  {name:"Amanda Wellner",title:"Lead UX Designer",manager:"Amani Ariel-Wamala",dept:"Product Management",loc:"Remote",tz:"CT"},
+  {name:"Catie Brown",title:"Lead, User Research",manager:"Amani Ariel-Wamala",dept:"Product Management",loc:"Nashville Office",tz:"CT"},
+  {name:"Daniel Foreman",title:"Technical Product Manager",manager:"Amani Ariel-Wamala",dept:"Product Management",loc:"Remote",tz:"MT"},
+  {name:"David Theurer",title:"Principal Software Product Manager",manager:"Amani Ariel-Wamala",dept:"Product Management",loc:"Remote",tz:"MT"},
+  {name:"Jordan Adams",title:"Senior Product Manager",manager:"Amani Ariel-Wamala",dept:"Product Management",loc:"Remote",tz:"MT"},
+  {name:"Lisa Jameson",title:"Senior Product Operations Manager",manager:"Amani Ariel-Wamala",dept:"Product Management",loc:"Nashville Office",tz:"CT"},
+  {name:"Sage Robins",title:"Senior Product Operations Manager",manager:"Amani Ariel-Wamala",dept:"Product Management",loc:"Remote",tz:"MT"},
+  {name:"Samantha Uebel",title:"Lead UX Designer",manager:"Amani Ariel-Wamala",dept:"Product Management",loc:"Remote",tz:"ET"},
+  {name:"Tracy Gillespie",title:"Principal Software Product Manager",manager:"Amani Ariel-Wamala",dept:"Product Management",loc:"Nashville Office",tz:"CT"},
+  {name:"Aaron Raymer",title:"Senior Manager, Technology",manager:"Jerry Jasperson",dept:"Technology",loc:"Remote",tz:"CT"},
+  {name:"Andrew Johnson",title:"Staff Cloud Engineer",manager:"Jerry Jasperson",dept:"Technology",loc:"Remote",tz:"CT"},
+  {name:"Alex Paulson",title:"Senior Software Engineer",manager:"Aaron Raymer",dept:"Product & Technology",loc:"Nashville Office",tz:"CT"},
+  {name:"Alex Thornbury",title:"Staff Software Engineer",manager:"Aaron Raymer",dept:"Product & Technology",loc:"Remote",tz:"ET"},
+  {name:"Alyssa Jackson",title:"Senior Software Engineer",manager:"Aaron Raymer",dept:"Product & Technology",loc:"Remote",tz:"ET"},
+  {name:"Andrew Townsend",title:"Senior Software Engineer",manager:"Aaron Raymer",dept:"Product & Technology",loc:"Remote",tz:""},
+  {name:"Brendan Ortmann",title:"Software Engineer II",manager:"Aaron Raymer",dept:"Product & Technology",loc:"Nashville Office",tz:"CT"},
+  {name:"Daniel Lopez",title:"Data Engineer",manager:"Aaron Raymer",dept:"Product & Technology",loc:"Remote",tz:"MT"},
+  {name:"Jonathan Frankel",title:"Senior Software Engineer",manager:"Aaron Raymer",dept:"Product & Technology",loc:"Nashville Office",tz:"CT"},
+  {name:"Michael Endsley",title:"Staff Software Engineer",manager:"Aaron Raymer",dept:"Product & Technology",loc:"Remote",tz:"MT"},
+  {name:"Michael Herman",title:"Data Engineer",manager:"Aaron Raymer",dept:"Product & Technology",loc:"Remote",tz:"MT"},
+  {name:"Nick Florin",title:"Senior Software Engineer",manager:"Aaron Raymer",dept:"Product & Technology",loc:"Remote",tz:"ET"},
+  {name:"Sam Schneller",title:"Software Engineer II",manager:"Aaron Raymer",dept:"Product & Technology",loc:"Remote",tz:"ET"},
+  {name:"Katelyn Kleinpeter",title:"Workforce Partnerships & Operations Lead",manager:"Melinda Perez",dept:"Business Operations",loc:"Remote",tz:"CT"},
+  {name:"Reina Beach",title:"Event Coordinator",manager:"Melinda Perez",dept:"Business Operations",loc:"Nashville Office",tz:"CT"},
+  {name:"Jorge Ugaz",title:"Senior Research Scientist",manager:"Patricia Saenz-Armstrong",dept:"Craft Intelligence",loc:"Remote",tz:"ET"},
+  {name:"Nell Williams",title:"Senior Research Analyst",manager:"Patricia Saenz-Armstrong",dept:"Craft Intelligence",loc:"Remote",tz:"ET"},
+  {name:"Stephanie Quinn",title:"Senior Business Analyst",manager:"Patricia Saenz-Armstrong",dept:"Craft Intelligence",loc:"Remote",tz:"CT"},
+  {name:"Victoria Lawrence",title:"Senior Manager, Customer Success",manager:"TBH 1",dept:"Customer Success",loc:"Remote",tz:"ET"},
+  {name:"Kimberly Eckert",title:"Senior Manager, Instructional Innovation & Apprenticeship Design",manager:"TBH 1",dept:"Instructional Innovation",loc:"Remote",tz:"CT"},
+  {name:"Melanie Flowers",title:"Senior Manager, Workforce and WIOA",manager:"TBH 1",dept:"Workforce & WIOA",loc:"Remote",tz:"CT"},
+  {name:"TBH 3",title:"Senior Manager, Craft Advisory Services",manager:"TBH 1",dept:"Craft Consulting",loc:"Nashville Office",tz:"CT",tbh:true},
+  {name:"Jenn Mathis",title:"Senior Manager, IHE Technical Sales",manager:"TBH 2",dept:"Partnership Development",loc:"Remote",tz:"ET"},
+  {name:"Dennis Williamson",title:"Manager, Workforce Partnership Development",manager:"TBH 2",dept:"Workforce Partnership",loc:"Remote",tz:"CT"},
+  {name:"Karen Riddell",title:"Senior Technical Sales Engineer",manager:"TBH 2",dept:"Solution Engineering",loc:"Nashville Office",tz:"CT"},
+  {name:"Scott Smith",title:"Senior Manager, Technical Marketing",manager:"TBH 2",dept:"Marketing",loc:"Remote",tz:"ET"},
+  {name:"Chloe Sun",title:"Lead Customer Success Coordinator",manager:"Victoria Lawrence",dept:"Customer Success",loc:"Remote",tz:"ET"},
+  {name:"Gigi Arnone",title:"Customer Operations Analyst",manager:"Victoria Lawrence",dept:"Customer Success",loc:"Remote",tz:"MT"},
+  {name:"Jacob Clark",title:"Senior Customer Success Manager",manager:"Victoria Lawrence",dept:"Customer Success",loc:"Remote",tz:"ET"},
+  {name:"Raven Harris",title:"Workforce Partnerships & Operations Lead",manager:"Kimberly Eckert",dept:"Instructional Innovation",loc:"Remote",tz:"CT"},
+  {name:"Teryn Bryant",title:"Workforce Research & Implementation Lead",manager:"Kimberly Eckert",dept:"Instructional Innovation",loc:"Remote",tz:"CT"},
+  {name:"Addison Watson",title:"Manager, Regional Workforce Development Board Partner Success",manager:"Melanie Flowers",dept:"Workforce & WIOA",loc:"Remote",tz:"CT"},
+  {name:"Geralyn Smith",title:"Research Analyst",manager:"Melanie Flowers",dept:"Workforce & WIOA",loc:"Remote",tz:"CT"},
+  {name:"Joyce Milling",title:"Apprenticeship Program Development Advisor",manager:"TBH 3",dept:"Craft Consulting",loc:"Remote",tz:"ET"},
+  {name:"Mamie Williams",title:"Nursing Pathway Development Advisor",manager:"TBH 3",dept:"Craft Consulting",loc:"Nashville Office",tz:"CT"},
+  {name:"MK Sagaria-Barritt",title:"Apprenticeship Program Development Advisor",manager:"TBH 3",dept:"Craft Consulting",loc:"Remote",tz:"MT"},
+  {name:"Michelle Jewett",title:"Apprenticeship Program Development Advisor",manager:"TBH 3",dept:"Craft Consulting",loc:"Remote",tz:"MT"},
+  {name:"Robert Owens",title:"Senior Strategic Partnerships Manager",manager:"Jenn Mathis",dept:"Partnership Development",loc:"Remote",tz:"ET"},
+  {name:"Ryan Shellen",title:"Manager, Technical Sales Account Executive",manager:"Jenn Mathis",dept:"Partnership Development",loc:"Remote",tz:"MT"},
+  {name:"Sonia Cassatt",title:"Senior Technical Partnerships Manager, K12",manager:"Jenn Mathis",dept:"Partnership Development",loc:"Remote",tz:"PT"},
+  {name:"Daniel Saunders",title:"Business Development Representative",manager:"Ryan Shellen",dept:"Partnership Development",loc:"Remote",tz:"ET"},
+  {name:"Ray Valenzuela",title:"Business Development Representative",manager:"Ryan Shellen",dept:"Partnership Development",loc:"Remote",tz:"CT"},
+  {name:"Adam Marinelli",title:"Regional Workforce Development Board Manager",manager:"Dennis Williamson",dept:"Workforce Partnership",loc:"Remote",tz:"ET"},
+  {name:"Wendy Parker",title:"Regional Workforce Development Board Manager",manager:"Dennis Williamson",dept:"Workforce Partnership",loc:"Remote",tz:"ET"},
+  {name:"Manoj Kumar Reddy Kondreddygari",title:"Marketing Associate",manager:"Scott Smith",dept:"Marketing",loc:"Remote",tz:"ET"},
+];
+
+const employees=RAW.map((r,i)=>({...r,id:String(i+1),reports:[]}));
+const byName={};
+employees.forEach(e=>{byName[e.name]=e;});
+employees.forEach(e=>{if(e.manager&&byName[e.manager]&&!e.wgu)byName[e.manager].reports.push(e.id);});
+const byId=Object.fromEntries(employees.map(e=>[e.id,e]));
+const craftRoot=employees.find(e=>!e.manager);
+const wguMembers=employees.filter(e=>e.wgu);
+const craftEmps=employees.filter(e=>!e.wgu);
+const usedDepts=["All","WGU","Leadership",...[...new Set(craftEmps.map(e=>e.dept))].filter(d=>d!=="Leadership").sort()];
+
+function Logo(){
+  return(
+    <div style={{width:36,height:36,background:BRAND.white,borderRadius:8,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+      <svg viewBox="0 0 120 110" width="34" height="34" xmlns="http://www.w3.org/2000/svg">
+        <line x1="60" y1="36" x2="60" y2="22" stroke="#C8D5E0" strokeWidth="3.5"/>
+        <line x1="60" y1="72" x2="60" y2="86" stroke="#C8D5E0" strokeWidth="3.5"/>
+        <line x1="36" y1="54" x2="22" y2="54" stroke="#C8D5E0" strokeWidth="3.5"/>
+        <line x1="84" y1="54" x2="98" y2="54" stroke="#C8D5E0" strokeWidth="3.5"/>
+        <line x1="80" y1="36" x2="92" y2="18" stroke="#C8D5E0" strokeWidth="3"/>
+        <line x1="40" y1="72" x2="28" y2="88" stroke="#C8D5E0" strokeWidth="3"/>
+        <rect x="36" y="36" width="48" height="36" rx="9" fill="#002855"/>
+        <rect x="42" y="2" width="36" height="22" rx="7" fill="#46B1EF"/>
+        <rect x="42" y="86" width="36" height="22" rx="7" fill="#46B1EF"/>
+        <rect x="0" y="38" width="24" height="32" rx="7" fill="#0070F0"/>
+        <rect x="96" y="38" width="24" height="32" rx="7" fill="#0070F0"/>
+        <rect x="88" y="2" width="22" height="20" rx="6" fill="#97E152"/>
+        <rect x="10" y="86" width="22" height="20" rx="6" fill="#97E152"/>
+      </svg>
+    </div>
+  );
+}
+
+const initials=e=>e.tbh?"?":e.name.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
+function Avatar({emp,size=36}){
+  const bg=emp.tbh?BRAND.gray:emp.wgu?BRAND.sky:dc(emp.dept);
+  return(<div style={{width:size,height:size,borderRadius:"50%",background:bg,color:emp.tbh?BRAND.textMuted:BRAND.white,display:"flex",alignItems:"center",justifyContent:"center",fontSize:size*0.34,fontWeight:700,flexShrink:0,border:emp.tbh?`2px dashed ${BRAND.textMuted}`:"none",letterSpacing:"-0.02em"}}>{initials(emp)}</div>);
+}
+
+function Card({emp,onSelect,isRoot=false,faded=false}){
+  const[hovered,setHovered]=useState(false);
+  const color=emp.wgu?BRAND.sky:dc(emp.dept);
+  const meta=[emp.dept,emp.loc,emp.tz].filter(Boolean).join(" · ");
+  return(
+    <div onClick={()=>onSelect(emp)} onMouseEnter={()=>setHovered(true)} onMouseLeave={()=>setHovered(false)}
+      style={{display:"flex",alignItems:"center",gap:10,background:isRoot?BRAND.navy:BRAND.white,border:emp.tbh?`2px dashed ${color}`:`1.5px solid ${hovered?BRAND.blue:BRAND.gray}`,borderLeft:`4px solid ${color}`,borderRadius:10,padding:"10px 14px",cursor:"pointer",boxShadow:hovered?"0 4px 16px rgba(0,112,240,0.12)":"0 1px 4px rgba(0,40,85,0.06)",transition:"all 0.15s",maxWidth:520,width:"100%",boxSizing:"border-box",opacity:faded?0.4:1}}>
+      <Avatar emp={emp} size={isRoot?40:34}/>
+      <div style={{flex:1,minWidth:0}}>
+        <div style={{fontWeight:700,fontSize:isRoot?14:13,color:isRoot?BRAND.white:emp.tbh?BRAND.textMuted:BRAND.navy,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",display:"flex",alignItems:"center",gap:6}}>
+          {emp.tbh?"Open Role":emp.name}
+          {emp.tbh&&<span style={{fontSize:9,fontWeight:900,background:BRAND.lime,color:"#1a3300",borderRadius:4,padding:"1px 5px"}}>OPEN</span>}
+        </div>
+        <div style={{fontSize:11.5,color:isRoot?"rgba(255,255,255,0.75)":BRAND.textMuted,marginTop:1,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{emp.title}</div>
+        <div style={{fontSize:10.5,marginTop:3,display:"flex",alignItems:"center",gap:4,color:isRoot?"rgba(255,255,255,0.55)":color,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
+          <span style={{display:"inline-block",width:7,height:7,borderRadius:"50%",flexShrink:0,background:isRoot?BRAND.lime:color}}/>
+          {meta}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const INDENT=28;
+function nodeOrDescendantMatches(emp,matchFn){
+  if(matchFn(emp))return true;
+  return emp.reports.map(id=>byId[id]).filter(Boolean).some(c=>nodeOrDescendantMatches(c,matchFn));
+}
+
+function TreeNode({emp,depth,expanded,onToggle,onSelect}){
+  const isExpanded=expanded.has(emp.id);
+  const children=emp.reports.map(id=>byId[id]).filter(Boolean);
+  return(
+    <div>
+      <div style={{display:"flex",alignItems:"center",paddingLeft:depth*INDENT,marginBottom:4,position:"relative"}}>
+        {depth>0&&<div style={{position:"absolute",left:depth*INDENT-14,top:"50%",transform:"translateY(-50%)",width:10,height:1,background:BRAND.gray}}/>}
+        <div style={{flex:1,minWidth:0,maxWidth:520}}><Card emp={emp} onSelect={onSelect} isRoot={depth===0}/></div>
+        {children.length>0&&(
+          <div onClick={e=>{e.stopPropagation();onToggle(emp);}} style={{flexShrink:0,width:24,height:24,borderRadius:"50%",marginLeft:8,background:isExpanded?BRAND.blue:BRAND.canvas,color:isExpanded?BRAND.white:BRAND.textMuted,fontSize:10.5,fontWeight:700,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",transition:"all 0.15s",border:isExpanded?"none":`1.5px solid ${BRAND.gray}`,boxShadow:isExpanded?`0 2px 6px ${BRAND.blue}55`:"none"}}>
+            {children.length}
+          </div>
+        )}
+      </div>
+      {isExpanded&&children.length>0&&(
+        <div style={{position:"relative"}}>
+          <div style={{position:"absolute",left:(depth+1)*INDENT-14,top:0,bottom:8,width:1,background:BRAND.gray}}/>
+          {children.map(c=><TreeNode key={c.id} emp={c} depth={depth+1} expanded={expanded} onToggle={onToggle} onSelect={onSelect}/>)}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function FilteredNode({emp,depth,onSelect,matchFn}){
+  const selfMatches=matchFn(emp);
+  const children=emp.reports.map(id=>byId[id]).filter(Boolean);
+  const matchingChildren=children.filter(c=>nodeOrDescendantMatches(c,matchFn));
+  const isAncestor=!selfMatches&&matchingChildren.length>0;
+  if(!selfMatches&&matchingChildren.length===0)return null;
+  const showCard=selfMatches||isAncestor;
+  const nextDepth=showCard?depth+1:depth;
+  return(
+    <div>
+      {showCard&&(
+        <div style={{display:"flex",alignItems:"center",paddingLeft:depth*INDENT,marginBottom:4,position:"relative"}}>
+          {depth>0&&<div style={{position:"absolute",left:depth*INDENT-14,top:"50%",transform:"translateY(-50%)",width:10,height:1,background:BRAND.gray}}/>}
+          <div style={{flex:1,minWidth:0,maxWidth:520}}><Card emp={emp} onSelect={onSelect} isRoot={depth===0} faded={isAncestor}/></div>
+        </div>
+      )}
+      {matchingChildren.length>0&&(
+        <div style={{position:"relative"}}>
+          <div style={{position:"absolute",left:nextDepth*INDENT-14,top:0,bottom:8,width:1,background:BRAND.gray}}/>
+          {matchingChildren.map(c=><FilteredNode key={c.id} emp={c} depth={nextDepth} onSelect={onSelect} matchFn={matchFn}/>)}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function WGURow({onSelect}){
+  return(
+    <div style={{marginBottom:4,paddingLeft:INDENT,position:"relative"}}>
+      <div style={{position:"absolute",left:INDENT-14,top:28,width:10,height:1,background:BRAND.sky,opacity:0.5}}/>
+      <div style={{display:"flex",alignItems:"center",flexWrap:"wrap",gap:8,background:"#EEF7FD",border:`1.5px dashed ${BRAND.sky}`,borderLeft:`4px solid ${BRAND.sky}`,borderRadius:10,padding:"8px 12px",maxWidth:520}}>
+        <div style={{width:"100%",display:"flex",alignItems:"center",gap:8,marginBottom:4}}>
+          <span style={{fontSize:9.5,fontWeight:800,color:BRAND.sky,textTransform:"uppercase",letterSpacing:"0.07em"}}>WGU Partners</span>
+          <span style={{fontSize:9.5,color:BRAND.textMuted,fontStyle:"italic"}}>Affiliated · Not direct reports</span>
+        </div>
+        {wguMembers.map(emp=>(
+          <div key={emp.id} onClick={()=>onSelect(emp)} style={{display:"flex",alignItems:"center",gap:7,background:BRAND.white,borderRadius:8,padding:"5px 9px",border:`1px solid ${BRAND.sky}44`,cursor:"pointer",transition:"box-shadow 0.12s",minWidth:155}} onMouseEnter={e=>e.currentTarget.style.boxShadow=`0 2px 8px ${BRAND.sky}44`} onMouseLeave={e=>e.currentTarget.style.boxShadow="none"}>
+            <Avatar emp={emp} size={26}/>
+            <div style={{minWidth:0}}>
+              <div style={{fontSize:11.5,fontWeight:600,color:BRAND.navy,fontStyle:"italic",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{emp.name}</div>
+              <div style={{fontSize:9.5,color:BRAND.textMuted,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{emp.dept} · {emp.loc} · {emp.tz}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ListView({onSelect,activeDept,searchTerm}){
+  const s=searchTerm.trim().toLowerCase();
+  const matchFn=emp=>{
+    const ms=!s||emp.name.toLowerCase().includes(s)||emp.title.toLowerCase().includes(s)||emp.dept.toLowerCase().includes(s);
+    const md=activeDept==="All"||(activeDept==="WGU"&&emp.wgu)||(!emp.wgu&&emp.dept===activeDept);
+    return ms&&md;
+  };
+  const showWGU=activeDept==="All"||activeDept==="WGU";
+  const showDepts=activeDept!=="WGU";
+  const deptMap={};
+  craftEmps.forEach(e=>{if(!deptMap[e.dept])deptMap[e.dept]=[];deptMap[e.dept].push(e);});
+  const deptKeys=Object.keys(deptMap).filter(d=>activeDept==="All"||d===activeDept);
+  return(
+    <div style={{padding:"24px 32px",maxWidth:820,margin:"0 auto"}}>
+      {showWGU&&(
+        <div style={{marginBottom:28}}>
+          <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:10}}>
+            <div style={{width:8,height:8,borderRadius:"50%",background:BRAND.sky}}/>
+            <h3 style={{margin:0,fontSize:13,fontWeight:800,color:BRAND.navy}}>Extended Team (WGU Partners)</h3>
+            <span style={{fontSize:11,color:BRAND.textMuted}}>affiliated · not direct reports</span>
+          </div>
+          {wguMembers.filter(matchFn).map(emp=>(
+            <div key={emp.id} onClick={()=>onSelect(emp)} style={{display:"flex",alignItems:"center",gap:12,marginBottom:5,background:"#EEF7FD",border:`1.5px dashed ${BRAND.sky}`,borderLeft:`4px solid ${BRAND.sky}`,borderRadius:10,padding:"9px 14px",cursor:"pointer",transition:"box-shadow 0.12s"}} onMouseEnter={e=>e.currentTarget.style.boxShadow=`0 2px 10px ${BRAND.sky}33`} onMouseLeave={e=>e.currentTarget.style.boxShadow="none"}>
+              <Avatar emp={emp} size={32}/>
+              <div style={{flex:1,minWidth:0}}>
+                <div style={{fontWeight:600,fontSize:13,color:BRAND.navy,fontStyle:"italic"}}>{emp.name}</div>
+                <div style={{fontSize:11,color:BRAND.textMuted,marginTop:1}}>{emp.title}</div>
+                <div style={{fontSize:10,color:BRAND.sky,marginTop:2}}>{emp.dept} · {emp.loc} · {emp.tz}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+      {showDepts&&deptKeys.map(dept=>{
+        const color=dc(dept);
+        const filtered=deptMap[dept].filter(matchFn);
+        if(!filtered.length)return null;
+        const sorted=[...filtered.filter(e=>e.reports.length>0),...filtered.filter(e=>e.reports.length===0)];
+        return(
+          <div key={dept} style={{marginBottom:26}}>
+            <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:10}}>
+              <div style={{width:8,height:8,borderRadius:"50%",background:color}}/>
+              <h3 style={{margin:0,fontSize:13,fontWeight:800,color:BRAND.navy}}>{dept}</h3>
+              <span style={{fontSize:11,color:BRAND.textMuted}}>{filtered.length} people</span>
+            </div>
+            {sorted.map(emp=>{
+              const isMgr=emp.reports.length>0;
+              const meta=[emp.dept,emp.loc,emp.tz].filter(Boolean).join(" · ");
+              return(
+                <div key={emp.id} onClick={()=>onSelect(emp)} style={{display:"flex",alignItems:"center",gap:12,marginLeft:isMgr?0:20,marginBottom:5,background:BRAND.white,border:emp.tbh?`1.5px dashed ${color}`:`1px solid ${BRAND.gray}`,borderLeft:`4px solid ${isMgr?color:color+"60"}`,borderRadius:10,padding:"9px 14px",cursor:"pointer",transition:"box-shadow 0.12s"}} onMouseEnter={e=>e.currentTarget.style.boxShadow=`0 2px 10px ${color}30`} onMouseLeave={e=>e.currentTarget.style.boxShadow="none"}>
+                  <Avatar emp={emp} size={32}/>
+                  <div style={{flex:1,minWidth:0}}>
+                    <div style={{fontWeight:isMgr?700:500,fontSize:13,color:emp.tbh?BRAND.textMuted:BRAND.navy,display:"flex",alignItems:"center",gap:6}}>
+                      {emp.tbh?"Open Role":emp.name}
+                      {isMgr&&<span style={{fontSize:9,background:color+"18",color,borderRadius:4,padding:"1px 5px",fontWeight:700}}>Manager</span>}
+                      {emp.tbh&&<span style={{fontSize:9,background:BRAND.lime+"44",color:"#2a4a00",borderRadius:4,padding:"1px 5px",fontWeight:700}}>OPEN</span>}
+                    </div>
+                    <div style={{fontSize:11,color:BRAND.textMuted,marginTop:1}}>{emp.title}</div>
+                    <div style={{fontSize:10,color,marginTop:3,display:"flex",alignItems:"center",gap:4}}>
+                      <span style={{width:6,height:6,borderRadius:"50%",background:color,display:"inline-block",flexShrink:0}}/>
+                      {meta}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function DetailPanel({emp,onClose,onSelect}){
+  if(!emp)return null;
+  const color=emp.wgu?BRAND.sky:dc(emp.dept);
+  const manager=emp.manager?byName[emp.manager]:null;
+  const reports=emp.reports.map(id=>byId[id]).filter(Boolean);
+  return(
+    <div style={{position:"fixed",right:0,top:0,bottom:0,width:296,background:BRAND.white,boxShadow:"-4px 0 28px rgba(0,40,85,0.14)",zIndex:200,display:"flex",flexDirection:"column",animation:"panelIn 0.18s ease"}}>
+      <style>{`@keyframes panelIn{from{transform:translateX(20px);opacity:0}to{transform:none;opacity:1}}`}</style>
+      <div style={{background:color,padding:"22px 18px 18px",color:BRAND.white,flexShrink:0}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
+          <Avatar emp={emp} size={48}/>
+          <button onClick={onClose} style={{background:"rgba(255,255,255,0.2)",border:"none",borderRadius:8,color:BRAND.white,cursor:"pointer",padding:"4px 10px",fontSize:14,fontWeight:700}}>✕</button>
+        </div>
+        <h2 style={{margin:"12px 0 4px",fontSize:17,fontWeight:800,lineHeight:1.2}}>{emp.tbh?"Open Role":emp.name}</h2>
+        <p style={{margin:0,opacity:0.85,fontSize:12,lineHeight:1.4}}>{emp.title}</p>
+        {emp.wgu&&<span style={{display:"inline-block",marginTop:6,fontSize:10,fontWeight:700,background:"rgba(255,255,255,0.25)",borderRadius:5,padding:"2px 8px"}}>WGU Extended Team</span>}
+      </div>
+      <div style={{flex:1,overflowY:"auto",padding:18}}>
+        {[["🏢","Department",emp.wgu?"WGU Partner":emp.dept],["📍","Location",emp.loc],emp.tz?["🕒","Timezone",emp.tz]:null,manager&&!emp.wgu?["👤","Reports to",manager.name]:null].filter(Boolean).map(([icon,label,val])=>(
+          <div key={label} style={{display:"flex",gap:10,marginBottom:13}}>
+            <span style={{fontSize:15,flexShrink:0}}>{icon}</span>
+            <div>
+              <div style={{fontSize:9.5,color:BRAND.textMuted,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.06em"}}>{label}</div>
+              <div style={{fontSize:13,color:BRAND.navy,marginTop:1}}>{val}</div>
+            </div>
+          </div>
+        ))}
+        {reports.length>0&&(
+          <div style={{marginTop:18}}>
+            <h4 style={{margin:"0 0 10px",fontSize:11,color:BRAND.textMuted,textTransform:"uppercase",letterSpacing:"0.07em",fontWeight:700}}>Direct Reports ({reports.length})</h4>
+            {reports.map(r=>(
+              <div key={r.id} onClick={()=>onSelect(r)} style={{display:"flex",gap:9,alignItems:"center",padding:"7px 10px",borderRadius:8,cursor:"pointer",border:`1px solid ${BRAND.gray}`,marginBottom:5,transition:"background 0.12s"}} onMouseEnter={e=>e.currentTarget.style.background=BRAND.canvas} onMouseLeave={e=>e.currentTarget.style.background=BRAND.white}>
+                <Avatar emp={r} size={28}/>
+                <div style={{flex:1,minWidth:0}}>
+                  <div style={{fontSize:12,fontWeight:600,color:r.tbh?BRAND.textMuted:BRAND.navy,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{r.tbh?"Open Role":r.name}</div>
+                  <div style={{fontSize:10.5,color:BRAND.textMuted}}>{r.title}</div>
+                </div>
+                <span style={{fontSize:12,color:BRAND.textMuted}}>›</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function App(){
+  const[view,setView]=useState("tree");
+  const[expanded,setExpanded]=useState(new Set());
+  const[selected,setSelected]=useState(null);
+  const[activeDept,setActiveDept]=useState("All");
+  const[searchTerm,setSearchTerm]=useState("");
+  const[zoom,setZoom]=useState(1);
+  const[pan,setPan]=useState({x:0,y:0});
+  const[dragging,setDragging]=useState(false);
+  const dragStart=useRef(null);
+  const canvasRef=useRef(null);
+
+  const onToggle=useCallback(emp=>{setExpanded(prev=>{const n=new Set(prev);n.has(emp.id)?n.delete(emp.id):n.add(emp.id);return n;});},[]);
+  const onCard=useCallback(emp=>setSelected(emp),[]);
+  const onMouseDown=e=>{if(e.button!==0)return;setDragging(true);dragStart.current={x:e.clientX-pan.x,y:e.clientY-pan.y};};
+  const onMouseMove=e=>{if(!dragging)return;setPan({x:e.clientX-dragStart.current.x,y:e.clientY-dragStart.current.y});};
+  const onMouseUp=()=>setDragging(false);
+  const onWheel=useCallback(e=>{if(e.ctrlKey||e.metaKey){e.preventDefault();setZoom(z=>Math.min(2,Math.max(0.25,z-e.deltaY*0.001)));}},[]);
+  useEffect(()=>{const el=canvasRef.current;if(!el)return;el.addEventListener("wheel",onWheel,{passive:true});return()=>el.removeEventListener("wheel",onWheel);},[onWheel]);
+
+  const s=searchTerm.trim().toLowerCase();
+  const filterActive=activeDept!=="All"||s!=="";
+  const matchFn=emp=>{
+    const ms=!s||emp.name.toLowerCase().includes(s)||emp.title.toLowerCase().includes(s)||emp.dept.toLowerCase().includes(s);
+    const md=activeDept==="All"||(activeDept==="WGU"&&emp.wgu)||(!emp.wgu&&emp.dept===activeDept);
+    return ms&&md;
+  };
+  const showWGURow=(activeDept==="All"||activeDept==="WGU")&&s==="";
+  const totalMatches=employees.filter(matchFn).length;
+
+  return(
+    <div style={{height:"100vh",display:"flex",flexDirection:"column",fontFamily:"-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif",background:BRAND.canvas,overflow:"hidden"}}>
+      <div style={{background:BRAND.navy,padding:"10px 20px",flexShrink:0,borderBottom:"1px solid #00396e"}}>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10}}>
+          <div style={{display:"flex",alignItems:"center",gap:10}}>
+            <Logo/>
+            <div>
+              <div style={{color:BRAND.white,fontWeight:800,fontSize:15,letterSpacing:"-0.02em",lineHeight:1}}>Craft</div>
+              <div style={{color:"#4a7aaa",fontSize:11,marginTop:1}}>Org Chart 2026</div>
+            </div>
+          </div>
+          <div style={{display:"flex",background:"rgba(255,255,255,0.08)",borderRadius:8,padding:3}}>
+            {[["tree","⬡ Tree"],["list","☰ List"]].map(([v,lbl])=>(
+              <button key={v} onClick={()=>setView(v)} style={{padding:"4px 13px",borderRadius:6,border:"none",background:view===v?BRAND.blue:"transparent",color:view===v?BRAND.white:"rgba(255,255,255,0.6)",fontSize:11,fontWeight:600,cursor:"pointer",transition:"all 0.15s"}}>{lbl}</button>
+            ))}
+          </div>
+        </div>
+        <div style={{display:"flex",flexWrap:"wrap",gap:5}}>
+          {usedDepts.map(d=>{
+            const active=activeDept===d;
+            const c=d==="All"?BRAND.blue:d==="WGU"?BRAND.sky:dc(d);
+            return(<button key={d} onClick={()=>setActiveDept(d)} style={{padding:"4px 12px",borderRadius:20,border:active?`1.5px solid ${c}`:"1.5px solid transparent",background:active?c:"rgba(255,255,255,0.08)",color:active?BRAND.white:"rgba(255,255,255,0.6)",fontSize:11,fontWeight:600,cursor:"pointer",whiteSpace:"nowrap",transition:"all 0.15s"}}>{d}</button>);
+          })}
+        </div>
+      </div>
+      <div style={{background:BRAND.white,borderBottom:`1px solid ${BRAND.gray}`,padding:"8px 20px",display:"flex",alignItems:"center",gap:10,flexShrink:0}}>
+        <div style={{position:"relative",flex:1,maxWidth:360}}>
+          <span style={{position:"absolute",left:11,top:"50%",transform:"translateY(-50%)",color:BRAND.textMuted,fontSize:14}}>🔍</span>
+          <input value={searchTerm} onChange={e=>setSearchTerm(e.target.value)} placeholder="Search name, title, or department…" style={{width:"100%",padding:"7px 30px 7px 34px",border:`1px solid ${BRAND.gray}`,borderRadius:8,fontSize:12,outline:"none",color:BRAND.navy,background:BRAND.canvas,boxSizing:"border-box"}}/>
+          {searchTerm&&<button onClick={()=>setSearchTerm("")} style={{position:"absolute",right:8,top:"50%",transform:"translateY(-50%)",background:"none",border:"none",cursor:"pointer",color:BRAND.textMuted,fontSize:13}}>✕</button>}
+        </div>
+        <span style={{fontSize:11,color:BRAND.textMuted,flexShrink:0}}>{totalMatches} {totalMatches===1?"person":"people"} found</span>
+        {view==="tree"&&!filterActive&&(
+          <>
+            <button onClick={()=>setExpanded(new Set(employees.map(e=>e.id)))} style={{fontSize:11,color:BRAND.blue,background:"none",border:`1px solid ${BRAND.blue}`,borderRadius:6,padding:"5px 11px",cursor:"pointer",fontWeight:600,flexShrink:0}}>Expand All</button>
+            <button onClick={()=>setExpanded(new Set())} style={{fontSize:11,color:BRAND.textMuted,background:"none",border:`1px solid ${BRAND.gray}`,borderRadius:6,padding:"5px 11px",cursor:"pointer",fontWeight:600,flexShrink:0}}>Collapse</button>
+          </>
+        )}
+      </div>
+      <div style={{flex:1,position:"relative",overflow:"hidden"}}>
+        {view==="tree"?(
+          <div ref={canvasRef} onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp} onMouseLeave={onMouseUp} style={{width:"100%",height:"100%",cursor:dragging?"grabbing":"grab",overflowY:"auto",overflowX:"hidden"}}>
+            <div style={{transform:`translate(${pan.x}px,${pan.y}px) scale(${zoom})`,transformOrigin:"top left",transition:dragging?"none":"transform 0.08s ease",padding:"36px 40px 80px",minWidth:"max-content"}}>
+              {filterActive?<FilteredNode emp={craftRoot} depth={0} onSelect={onCard} matchFn={matchFn}/>:<TreeNode emp={craftRoot} depth={0} expanded={expanded} onToggle={onToggle} onSelect={onCard}/>}
+              {showWGURow&&<WGURow onSelect={onCard}/>}
+            </div>
+          </div>
+        ):(
+          <div style={{height:"100%",overflowY:"auto"}}><ListView onSelect={onCard} activeDept={activeDept} searchTerm={searchTerm}/></div>
+        )}
+        {view==="tree"&&(
+          <div style={{position:"absolute",bottom:20,right:selected?312:20,display:"flex",flexDirection:"column",gap:4,transition:"right 0.2s"}}>
+            {[["+",()=>setZoom(z=>Math.min(2,z+0.1))],["−",()=>setZoom(z=>Math.max(0.25,z-0.1))],["⊙",()=>{setZoom(1);setPan({x:0,y:0});}]].map(([icon,fn])=>(
+              <button key={icon} onClick={fn} style={{width:34,height:34,borderRadius:8,border:`1px solid ${BRAND.gray}`,background:BRAND.white,fontSize:15,cursor:"pointer",color:BRAND.navy,boxShadow:"0 2px 8px rgba(0,40,85,0.09)",display:"flex",alignItems:"center",justifyContent:"center",fontWeight:700}}>{icon}</button>
+            ))}
+            <div style={{background:BRAND.white,border:`1px solid ${BRAND.gray}`,borderRadius:8,padding:"3px 6px",fontSize:10.5,color:BRAND.textMuted,textAlign:"center"}}>{Math.round(zoom*100)}%</div>
+          </div>
+        )}
+        {view==="tree"&&<div style={{position:"absolute",bottom:20,left:20,pointerEvents:"none",background:"rgba(255,255,255,0.92)",borderRadius:8,padding:"5px 12px",fontSize:10.5,color:BRAND.textMuted,border:`1px solid ${BRAND.gray}`}}>Click <strong style={{color:BRAND.blue}}>badge</strong> to expand · Click card for details · Drag to pan · Ctrl+scroll to zoom</div>}
+      </div>
+      {selected&&<DetailPanel emp={selected} onClose={()=>setSelected(null)} onSelect={onCard}/>}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
