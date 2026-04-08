@@ -20,181 +20,138 @@
 <div id="root"></div>
 <script type="text/babel">
 const{useState,useRef,useCallback,useEffect}=React;
-
 const BRAND={navy:"#002855",blue:"#0070F0",lime:"#97E152",sky:"#46B1EF",gray:"#E3E3E3",white:"#FFFFFF",canvas:"#F0F4F8",textMuted:"#6B7A90"};
 const DEPT_COLORS={"Leadership":"#002855","Executive Leadership":"#002855","Product Management":"#46B1EF","Technology":"#005FA3","Business Operations":"#1A9E6B","Craft Intelligence":"#5C7AEA","Customer Success":"#27AE60","Partnership Development":"#8E44AD","Workforce Partnership":"#2980B9","Instructional Innovation":"#16A085","Instructional Innovation & Apprenticeship Design":"#16A085","Workforce & WIOA":"#D35400","Craft Consulting":"#0891B2","Marketing":"#B03060","Solution Engineering":"#117864","People & Talent":"#1A5276","Finance":"#784212","Legal":"#4A235A","WGU":"#46B1EF"};
 const dc=d=>DEPT_COLORS[d]||BRAND.textMuted;
 
-const WGU_INFO={
-  "Kymberly Lavigne-Hinkley":{email:"k.lavignehinkley@wgu.edu",role:"WGU Advancement — Philanthropic Partnerships Support"},
-  "Myka Smith":{email:"myka.smith@wgu.edu",role:"Primary People & Talent Partner"},
-  "Emily Evers":{email:"emily.evers@wgu.edu",role:"People & Talent — Secondary Contact"},
-  "Mike Henochowicz":{email:"mike.henochowicz@wgu.edu",role:"Primary Legal Contact"},
-  "Justin Larsen":{email:"justin.larsen@wgu.edu",role:"Primary Finance Contact"},
-  "Jill Jess":{email:"jill.jess@wgu.edu",role:"Primary Strategic Communications Contact"},
-  "Ryan Stone":{email:"ryan.stone@wgu.edu",role:"Primary Procurement Contact"},
+const WGU_INFO={"Kymberly Lavigne-Hinkley":{email:"k.lavignehinkley@wgu.edu",role:"WGU Advancement — Philanthropic Partnerships Support"},"Myka Smith":{email:"myka.smith@wgu.edu",role:"Primary People & Talent Partner"},"Emily Evers":{email:"emily.evers@wgu.edu",role:"People & Talent — Secondary Contact"},"Mike Henochowicz":{email:"mike.henochowicz@wgu.edu",role:"Primary Legal Contact"},"Emelie Klott":{email:"emelie.klott@wgu.edu",role:"Legal — Secondary Contact"},"Justin Larsen":{email:"justin.larsen@wgu.edu",role:"Primary Finance Contact"},"Jill Jess":{email:"jill.jess@wgu.edu",role:"Primary Strategic Communications Contact"},"Ryan Stone":{email:"ryan.stone@wgu.edu",role:"Primary Procurement Contact"}};
+
+const CONTRACTOR_INFO={"Reed Dunkle":{email:"",howToContact:"Contact Project Lead",projectLead:"Aaron Raymer",projects:"Craft Connect Engineering",expertise:"Engineering",endDate:"6/30/2026"},"Brian Schultek":{email:"",howToContact:"Contact Project Lead",projectLead:"Aaron Raymer",projects:"Craft Connect Engineering",expertise:"Engineering",endDate:"6/30/2026"},"Vivian Osegwegie":{email:"",howToContact:"Contact Project Lead",projectLead:"Aaron Raymer",projects:"Thoughtspot",expertise:"Engineering",endDate:"No end date"},"Vishnu Boppa":{email:"",howToContact:"Contact Project Lead",projectLead:"Aaron Raymer",projects:"Thoughtspot",expertise:"Engineering",endDate:"No end date"},"Chandra Mukkara":{email:"",howToContact:"Contact Project Lead",projectLead:"Aaron Raymer",projects:"Thoughtspot",expertise:"Engineering",endDate:"No end date"},"James Gutierrez":{email:"",howToContact:"Contact Project Lead",projectLead:"Aaron Raymer",projects:"Craft Connect Engineering",expertise:"Engineering",endDate:"11/3/2026"},"Edison Zuluaga":{email:"",howToContact:"Contact Project Lead",projectLead:"Aaron Raymer",projects:"Craft Connect Engineering",expertise:"Engineering",endDate:"6/30/2026"},"Juan Zuluaga":{email:"",howToContact:"Contact Project Lead",projectLead:"Aaron Raymer",projects:"Craft Connect Engineering",expertise:"Engineering",endDate:"6/30/2026"},"Neena Goswamy Mand":{email:"neena.goswamy.mand@crafteducation.com",howToContact:"Contact Contractor Directly",projectLead:"Adam Davis",projects:"Sutter Health",expertise:"Project Management",endDate:"In Process"},"Erin Silver":{email:"erin.silver@crafteducation.com",howToContact:"Quick questions: contractor directly · Meeting: project lead",projectLead:"Adam Davis",projects:"Colorado Partnerships",expertise:"State Strategy",endDate:"8/31/2026"},"Michelle Jewett":{email:"michelle.jewett@crafteducation.com",howToContact:"Contact Contractor Directly",projectLead:"Adam Davis",projects:"State Strategy; Pennsylvania Partnerships",expertise:"State Strategy; Facilitation",endDate:"5/31/2026"},"Amy Lesniak":{email:"amy.lesniak@crafteducation.com",howToContact:"Contact Contractor Directly",projectLead:"Adam Davis",projects:"Internal Process Improvements; RAPIDS",expertise:"Apprenticeship Compliance",endDate:"4/1/2026"},"Erica Love":{email:"erica.barreiro@crafteducation.com",howToContact:"Contact Contractor Directly",projectLead:"Adam Davis",projects:"Walmart/USAF LER Digital Credentials",expertise:"LERs; Digital Credentials",endDate:"8/31/2026"},"M. Brian Peake":{email:"brian@thegreysolutions.com",howToContact:"Contact Erica Love",projectLead:"Adam Davis",projects:"Walmart/USAF LER Digital Credentials",expertise:"Project Management",endDate:"9/27/2026"},"Curtis McGhee":{email:"curtis@thegreysolutions.com",howToContact:"Contact Erica Love",projectLead:"Adam Davis",projects:"Walmart/USAF LER Digital Credentials",expertise:"Project Management",endDate:"9/27/2026"},"Bridgett Willey":{email:"bridgett.willey@crafteducation.com",howToContact:"Contact Project Lead",projectLead:"Catie Brown",projects:"Healthcare Program Tracking",expertise:"Healthcare Apprenticeships",endDate:"4/30/2026"},"Dan McGrew":{email:"dan@mcgrewconsulting.com",howToContact:"Quick questions: contractor directly · Meeting: project lead",projectLead:"Dennis Williamson",projects:"Workforce Partnership Development",expertise:"Workforce Development Boards",endDate:"7/31/2026"},"Sarah Schade":{email:"sarahschade@schadeconsultingllc.com",howToContact:"Quick questions: contractor directly · Meeting: project lead",projectLead:"Dennis Williamson",projects:"Workforce Partnership Development",expertise:"Workforce Development Boards",endDate:"7/31/2026"},"Lauren Rinco":{email:"lauren.runco@solidinfodesign.com",howToContact:"Contact Erica Love",projectLead:"Erica Love",projects:"Walmart/USAF LER Digital Credentials",expertise:"Engineering; LERs; Digital Credentials",endDate:"9/1/2026"},"Robin Reinhardt":{email:"robin.reinhardt@crafteducation.com",howToContact:"Contact Jerry Jasperson / Patty Moore",projectLead:"Jerry Jasperson",projects:"Security Consulting",expertise:"Security; SOC2; Google Workspace",endDate:"No end date"},"D. Palfreyman":{email:"paswani@ctt-education.com",howToContact:"Contact Project Lead",projectLead:"Kimberly Eckert",projects:"Oxford Convenings",expertise:"Events",endDate:"In Process"},"Hudson Baird":{email:"hudson.baird@crafteducation.com",howToContact:"Contact Contractor Directly",projectLead:"Kimberly Eckert",projects:"Oxford Convenings",expertise:"Events",endDate:"3/31/2026"},"Tamika Graham":{email:"tamika.graham@crafteducation.com",howToContact:"Contact Contractor Directly",projectLead:"Mallory Dwinal-Palisch",projects:"Administrative; Special Projects",expertise:"Administrative Support",endDate:"No end date"},"Heather Webb":{email:"heather.webb@crafteducation.com",howToContact:"Contact Contractor Directly",projectLead:"Mallory Dwinal-Palisch",projects:"Foundational Workplace Skills Certificate",expertise:"Strategic Planning",endDate:"7/1/2026"},"Hugh Molotsi":{email:"hugh@molotsi.com",howToContact:"Contact Adam Davis",projectLead:"Mallory Dwinal-Palisch",projects:"General Advisory Services",expertise:"Leadership Advisory",endDate:"6/30/2026"},"Angela Jackson":{email:"angela_jackson@futureforward.institute",howToContact:"Contact Mallory Dwinal-Palisch",projectLead:"Mallory Dwinal-Palisch",projects:"General Advisory Services",expertise:"Leadership Advisory",endDate:"9/1/2026"},"Portia Pratt":{email:"ppratt@nga.org",howToContact:"Contact Adam Davis",projectLead:"Mallory Dwinal-Palisch",projects:"State Level Strategy",expertise:"State Strategy",endDate:"3/31/2026"},"Dr. Paul Bruno":{email:"pbruno@illinois.edu",howToContact:"Contact Project Lead",projectLead:"Patricia Saenz-Armstrong",projects:"State Data Systems Project",expertise:"Research",endDate:"6/30/2026"},"Dr. Tuan Nguyen":{email:"tuan.nguyen@missouri.edu",howToContact:"Contact Project Lead",projectLead:"Patricia Saenz-Armstrong",projects:"State Data Systems; Teacher Shortage Research",expertise:"Research",endDate:"12/31/2026"},"Dr. Joshua Bleiberg":{email:"jbleiber@pitt.edu",howToContact:"Contact Project Lead",projectLead:"Patricia Saenz-Armstrong",projects:"Teacher Shortage Research",expertise:"Research",endDate:"12/31/2026"},"Samantha Lenger":{email:"samantha.lenger@crafteducation.com",howToContact:"Contact Project Lead",projectLead:"Scott Smith",projects:"Social Media Management",expertise:"Social Media",endDate:"8/31/2026"}};
+
+const TREE={
+  1:{name:"Mallory Dwinal-Palisch",title:"President",dept:"Leadership",loc:"Nashville Office",tz:"CT",flags:{},children:[10,11,12]},
+  2:{name:"Kymberly Lavigne-Hinkley",title:"National Philanthropic Partnerships Director, WGU Advancement",dept:"WGU",loc:"Remote",tz:"ET",flags:{wgu:true},children:[]},
+  3:{name:"Myka Smith",title:"Senior People & Talent Business Partner",dept:"WGU",loc:"SLC Office",tz:"MT",flags:{wgu:true},children:[]},
+  4:{name:"Emily Evers",title:"Senior People & Talent Generalist",dept:"WGU",loc:"SLC Office",tz:"MT",flags:{wgu:true},children:[]},
+  5:{name:"Mike Henochowicz",title:"Senior Staff Attorney",dept:"WGU",loc:"SLC Office",tz:"MT",flags:{wgu:true},children:[]},
+  6:{name:"Emelie Klott",title:"Senior Staff Attorney",dept:"WGU",loc:"SLC Office",tz:"MT",flags:{wgu:true},children:[]},
+  7:{name:"Justin Larsen",title:"Senior Financial Analyst",dept:"WGU",loc:"SLC Office",tz:"MT",flags:{wgu:true},children:[]},
+  8:{name:"Jill Jess",title:"Senior Manager, Strategic Communications",dept:"WGU",loc:"SLC Office",tz:"MT",flags:{wgu:true},children:[]},
+  9:{name:"Ryan Stone",title:"Procurement Specialist",dept:"WGU",loc:"SLC Office",tz:"MT",flags:{wgu:true},children:[]},
+  10:{name:"Adam Davis",title:"Chief Operating Officer",dept:"Leadership",loc:"SLC Office",tz:"MT",flags:{},children:[18,19,20,21,22]},
+  11:{name:"Marté Williams",title:"Executive Assistant",dept:"Leadership",loc:"Nashville Office",tz:"CT",flags:{},children:[]},
+  12:{name:"Contractors",title:"",dept:"Leadership",loc:"",tz:"",flags:{group:true},children:[13,14,15,16,17]},
+  13:{name:"Angela Jackson",title:"Contractor",dept:"Leadership",loc:"Remote",tz:"ET",flags:{contractor:true},children:[]},
+  14:{name:"Heather Webb",title:"Contractor",dept:"Leadership",loc:"Remote",tz:"MT",flags:{contractor:true},children:[]},
+  15:{name:"Hugh Molotsi",title:"Contractor",dept:"Leadership",loc:"Remote",tz:"MT",flags:{contractor:true},children:[]},
+  16:{name:"Portia Pratt",title:"Contractor",dept:"Leadership",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
+  17:{name:"Tamika Graham",title:"Contractor",dept:"Leadership",loc:"Remote",tz:"GMT",flags:{contractor:true},children:[]},
+  18:{name:"Patty Moore",title:"Head of Product & Technology",dept:"Technology",loc:"SLC Office",tz:"MT",flags:{},children:[50,51,52,53,54]},
+  19:{name:"Melinda Perez",title:"Senior Manager, Business Operations",dept:"Business Operations",loc:"Remote",tz:"ET",flags:{},children:[66,67]},
+  20:{name:"Patricia Saenz-Armstrong",title:"Senior Manager, Data and Research Initiatives",dept:"Craft Intelligence",loc:"Remote",tz:"ET",flags:{},children:[68,69,70,71,72,73]},
+  21:{name:"TBH-2",title:"Director, Business Development",dept:"Partnership Development",loc:"Nashville Office",tz:"CT",flags:{tbh:true},children:[89,90,91,92]},
+  22:{name:"TBH-1",title:"Director, Customer Success & Strategic Implementation",dept:"Customer Success",loc:"Nashville Office",tz:"CT",flags:{tbh:true},children:[74,75,76,77]},
+  50:{name:"Amani Ariel-Wamala",title:"Director, Technical Product Management",dept:"Product Management",loc:"Remote",tz:"ET",flags:{},children:[29,30,31,32,33,34,35,36,37,38,39]},
+  51:{name:"Kristin Eller",title:"Project Manager, Grants",dept:"Technology",loc:"Nashville Office",tz:"CT",flags:{},children:[]},
+  52:{name:"Esther Hong",title:"Senior Technical Program Manager",dept:"Technology",loc:"SLC Office",tz:"MT",flags:{},children:[]},
+  53:{name:"Jerry Jasperson",title:"Senior Director, Technology",dept:"Technology",loc:"Remote",tz:"MT",flags:{},children:[41,42,43]},
+  54:{name:"TBH-4",title:"Senior Manager, Engineering",dept:"Technology",loc:"",tz:"",flags:{tbh:true},children:[55]},
+  55:{name:"TBH-7",title:"Manager, Software Engineering",dept:"Technology",loc:"",tz:"",flags:{tbh:true},children:[]},
+  29:{name:"Xander Mendiola",title:"Staff Software Product Manager",dept:"Product Management",loc:"Remote",tz:"ET",flags:{},children:[]},
+  30:{name:"Amanda Wellner",title:"Lead UX Designer",dept:"Product Management",loc:"Remote",tz:"CT",flags:{},children:[]},
+  31:{name:"Catie Brown",title:"Lead, User Research",dept:"Product Management",loc:"Nashville Office",tz:"CT",flags:{},children:[40]},
+  32:{name:"Daniel Foreman",title:"Technical Product Manager",dept:"Product Management",loc:"Remote",tz:"MT",flags:{},children:[]},
+  33:{name:"David Theurer",title:"Principal Software Product Manager",dept:"Product Management",loc:"Remote",tz:"MT",flags:{},children:[]},
+  34:{name:"Jordan Adams",title:"Senior Product Manager",dept:"Product Management",loc:"Remote",tz:"MT",flags:{},children:[]},
+  35:{name:"Lisa Jameson",title:"Senior Product Operations Manager",dept:"Product Management",loc:"Nashville Office",tz:"CT",flags:{},children:[]},
+  36:{name:"Sage Robins",title:"Senior Product Operations Manager",dept:"Product Management",loc:"Remote",tz:"MT",flags:{},children:[]},
+  37:{name:"Samantha Uebel",title:"Lead UX Designer",dept:"Product Management",loc:"Remote",tz:"ET",flags:{},children:[]},
+  38:{name:"Tracy Gillespie",title:"Principal Software Product Manager",dept:"Product Management",loc:"Nashville Office",tz:"CT",flags:{},children:[]},
+  39:{name:"TBH-PM",title:"Senior Manager, Product & User Experience",dept:"Product Management",loc:"",tz:"",flags:{tbh:true},children:[]},
+  40:{name:"Bridgett Willey",title:"Contractor",dept:"Product Management",loc:"Remote",tz:"CT",flags:{contractor:true},children:[]},
+  41:{name:"Aaron Raymer",title:"Senior Manager, Technology",dept:"Technology",loc:"Remote",tz:"CT",flags:{},children:[44,45,46,47,48,49,56,57,58,59,60,61,62,63,64,65,115,116,117,118,119,120]},
+  42:{name:"Andrew Johnson",title:"Staff Cloud Engineer",dept:"Technology",loc:"Remote",tz:"CT",flags:{},children:[]},
+  43:{name:"Robin Reinhardt",title:"Contractor",dept:"Technology",loc:"Remote",tz:"PT",flags:{contractor:true},children:[]},
+  44:{name:"Alex Paulson",title:"Senior Software Engineer",dept:"Technology",loc:"Nashville Office",tz:"CT",flags:{},children:[]},
+  45:{name:"Alex Thornbury",title:"Staff Software Engineer",dept:"Technology",loc:"Remote",tz:"ET",flags:{},children:[]},
+  46:{name:"Alyssa Jackson",title:"Senior Software Engineer",dept:"Technology",loc:"Remote",tz:"ET",flags:{},children:[]},
+  47:{name:"Andrew Townsend",title:"Senior Software Engineer",dept:"Technology",loc:"Remote",tz:"",flags:{},children:[]},
+  48:{name:"Brendan Ortmann",title:"Software Engineer II",dept:"Technology",loc:"Nashville Office",tz:"CT",flags:{},children:[]},
+  49:{name:"Daniel Lopez",title:"Data Engineer",dept:"Technology",loc:"Remote",tz:"MT",flags:{},children:[]},
+  56:{name:"Jonathan Frankel",title:"Senior Software Engineer",dept:"Technology",loc:"Nashville Office",tz:"CT",flags:{},children:[]},
+  57:{name:"Michael Buhler",title:"Senior Software Engineer",dept:"Technology",loc:"Remote",tz:"",flags:{},children:[]},
+  58:{name:"Michael Endsley",title:"Staff Software Engineer",dept:"Technology",loc:"Remote",tz:"MT",flags:{},children:[]},
+  59:{name:"Michael Herman",title:"Data Engineer",dept:"Technology",loc:"Remote",tz:"MT",flags:{},children:[]},
+  60:{name:"Nick Florin",title:"Senior Software Engineer",dept:"Technology",loc:"Remote",tz:"ET",flags:{},children:[]},
+  61:{name:"Sam Schneller",title:"Software Engineer II",dept:"Technology",loc:"Remote",tz:"ET",flags:{},children:[]},
+  62:{name:"TBH-5",title:"Staff Data Engineering",dept:"Technology",loc:"",tz:"",flags:{tbh:true},children:[]},
+  63:{name:"TBH-6",title:"Senior Software Engineer",dept:"Technology",loc:"",tz:"",flags:{tbh:true},children:[]},
+  64:{name:"Brian Schultek",title:"Contractor (Base 2)",dept:"Technology",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
+  65:{name:"Chandra Mukkara",title:"Contractor (Insight Global)",dept:"Technology",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
+  66:{name:"Katelyn Kleinpeter",title:"Workforce Partnerships & Operations Lead",dept:"Business Operations",loc:"Remote",tz:"CT",flags:{},children:[]},
+  67:{name:"Reina Beach",title:"Business Operations Manager",dept:"Business Operations",loc:"Nashville Office",tz:"CT",flags:{},children:[]},
+  68:{name:"Jorge Ugaz",title:"Senior Research Scientist",dept:"Craft Intelligence",loc:"Remote",tz:"ET",flags:{},children:[]},
+  69:{name:"Nell Williams",title:"Senior Research Analyst",dept:"Craft Intelligence",loc:"Remote",tz:"ET",flags:{},children:[]},
+  70:{name:"Stephanie Quinn",title:"Senior Business Analyst",dept:"Craft Intelligence",loc:"Remote",tz:"CT",flags:{},children:[]},
+  71:{name:"Dr. Joshua Bleiberg",title:"Contractor",dept:"Craft Intelligence",loc:"Remote",tz:"ET",flags:{contractor:true},children:[]},
+  72:{name:"Dr. Paul Bruno",title:"Contractor",dept:"Craft Intelligence",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
+  73:{name:"Dr. Tuan Nguyen",title:"Contractor",dept:"Craft Intelligence",loc:"Remote",tz:"CT",flags:{contractor:true},children:[]},
+  74:{name:"Kimberly Eckert",title:"Senior Manager, Instructional Innovation & Apprenticeship Design",dept:"Instructional Innovation",loc:"Remote",tz:"CT",flags:{},children:[98,99,100,101]},
+  75:{name:"Melanie Flowers",title:"Senior Manager, Workforce and WIOA",dept:"Workforce & WIOA",loc:"Remote",tz:"CT",flags:{},children:[102,103]},
+  76:{name:"Victoria Lawrence",title:"Senior Manager, Customer Success",dept:"Customer Success",loc:"Remote",tz:"ET",flags:{},children:[93,94,95,96,97]},
+  77:{name:"Craft Consulting Team",title:"",dept:"Craft Consulting",loc:"",tz:"",flags:{group:true},children:[82,84,85,86,78,79,80,81,83,87]},
+  78:{name:"Amy Lesniak",title:"Contractor",dept:"Craft Consulting",loc:"Remote",tz:"CT",flags:{contractor:true},children:[]},
+  79:{name:"Curtis McGhee",title:"Contractor (Grey Solutions)",dept:"Craft Consulting",loc:"Remote",tz:"ET",flags:{contractor:true},children:[]},
+  80:{name:"Erica Love",title:"Contractor",dept:"Craft Consulting",loc:"Remote",tz:"CT",flags:{contractor:true},children:[88]},
+  81:{name:"Erin Silver",title:"Contractor (Envision Strategy Group)",dept:"Craft Consulting",loc:"Remote",tz:"MT",flags:{contractor:true},children:[]},
+  82:{name:"Joyce Milling",title:"Apprenticeship Program Development Advisor",dept:"Craft Consulting",loc:"Remote",tz:"ET",flags:{},children:[]},
+  83:{name:"M. Brian Peake",title:"Contractor (Grey Solutions)",dept:"Craft Consulting",loc:"Remote",tz:"CT",flags:{contractor:true},children:[]},
+  84:{name:"Mamie Williams",title:"Nursing Pathway Development Advisor",dept:"Craft Consulting",loc:"Nashville Office",tz:"CT",flags:{},children:[]},
+  85:{name:"Michelle Jewett",title:"Apprenticeship Program Development Advisor",dept:"Craft Consulting",loc:"Remote",tz:"MT",flags:{},children:[]},
+  86:{name:"MK Sagaria-Barritt",title:"Apprenticeship Program Development Advisor",dept:"Craft Consulting",loc:"Remote",tz:"MT",flags:{},children:[]},
+  87:{name:"Neena Goswamy Mand",title:"Contractor",dept:"Craft Consulting",loc:"Remote",tz:"PT",flags:{contractor:true},children:[]},
+  88:{name:"Lauren Rinco",title:"Contractor (SOLID)",dept:"Craft Consulting",loc:"Remote",tz:"ET",flags:{contractor:true},children:[]},
+  89:{name:"Dennis Williamson",title:"Manager, Workforce Partnership Development",dept:"Workforce Partnership",loc:"Remote",tz:"CT",flags:{},children:[109,110,111,112]},
+  90:{name:"Jenn Mathis",title:"Senior Manager, Sales",dept:"Partnership Development",loc:"Remote",tz:"ET",flags:{},children:[104,105,106]},
+  91:{name:"Karen Riddell",title:"Senior Technical Sales Engineer",dept:"Solution Engineering",loc:"Nashville Office",tz:"CT",flags:{},children:[]},
+  92:{name:"Scott Smith",title:"Senior Manager, Technical Marketing",dept:"Marketing",loc:"Remote",tz:"ET",flags:{},children:[113,114]},
+  93:{name:"Chloe Sun",title:"Lead Customer Success Coordinator",dept:"Customer Success",loc:"Remote",tz:"ET",flags:{},children:[]},
+  94:{name:"Gigi Arnone",title:"Customer Operations Analyst",dept:"Customer Success",loc:"Remote",tz:"MT",flags:{},children:[]},
+  95:{name:"Jacob Clark",title:"Senior Customer Success Manager",dept:"Customer Success",loc:"Remote",tz:"ET",flags:{},children:[]},
+  96:{name:"TBH-CS1",title:"Customer Onboarding Specialist",dept:"Customer Success",loc:"",tz:"",flags:{tbh:true},children:[]},
+  97:{name:"TBH-CS2",title:"Customer Onboarding Specialist",dept:"Customer Success",loc:"",tz:"",flags:{tbh:true},children:[]},
+  98:{name:"Raven Harris",title:"Workforce Partnerships & Operations Lead",dept:"Instructional Innovation",loc:"Remote",tz:"CT",flags:{},children:[]},
+  99:{name:"Teryn Bryant",title:"Workforce Research & Implementation Lead",dept:"Instructional Innovation",loc:"Remote",tz:"CT",flags:{},children:[]},
+  100:{name:"D. Palfreyman",title:"Contractor (Center for Tutorial Teaching)",dept:"Instructional Innovation",loc:"Remote",tz:"GMT",flags:{contractor:true},children:[]},
+  101:{name:"Hudson Baird",title:"Contractor",dept:"Instructional Innovation",loc:"Remote",tz:"CT",flags:{contractor:true},children:[]},
+  102:{name:"Addison Watson",title:"Manager, Regional Workforce Development Board Partner Success",dept:"Workforce & WIOA",loc:"Remote",tz:"CT",flags:{},children:[]},
+  103:{name:"Geralyn Smith",title:"Research Analyst",dept:"Workforce & WIOA",loc:"Remote",tz:"CT",flags:{},children:[]},
+  104:{name:"Robert Owens",title:"Senior Strategic Partnerships Manager",dept:"Partnership Development",loc:"Remote",tz:"ET",flags:{},children:[]},
+  105:{name:"Ryan Shellen",title:"Manager, Technical Sales Account Executive",dept:"Partnership Development",loc:"Remote",tz:"MT",flags:{},children:[107,108]},
+  106:{name:"Sonia Cassatt",title:"Senior Technical Partnerships Manager, K12",dept:"Partnership Development",loc:"Remote",tz:"PT",flags:{},children:[]},
+  107:{name:"Daniel Saunders",title:"Business Development Representative",dept:"Partnership Development",loc:"Remote",tz:"ET",flags:{},children:[]},
+  108:{name:"Ray Valenzuela",title:"Business Development Representative",dept:"Partnership Development",loc:"Remote",tz:"CT",flags:{},children:[]},
+  109:{name:"Adam Marinelli",title:"Regional Workforce Development Board Manager",dept:"Workforce Partnership",loc:"Remote",tz:"ET",flags:{},children:[]},
+  110:{name:"Wendy Parker",title:"Regional Workforce Development Board Manager",dept:"Workforce Partnership",loc:"Remote",tz:"ET",flags:{},children:[]},
+  111:{name:"Dan McGrew",title:"Contractor",dept:"Workforce Partnership",loc:"Remote",tz:"ET",flags:{contractor:true},children:[]},
+  112:{name:"Sarah Schade",title:"Contractor",dept:"Workforce Partnership",loc:"Remote",tz:"CT",flags:{contractor:true},children:[]},
+  113:{name:"Manoj Kumar Reddy Kondreddygari",title:"Marketing Associate",dept:"Marketing",loc:"Remote",tz:"ET",flags:{},children:[]},
+  114:{name:"Samantha Lenger",title:"Contractor (Saturday Media)",dept:"Marketing",loc:"Remote",tz:"ET",flags:{contractor:true},children:[]},
+  115:{name:"Edison Zuluaga",title:"Contractor (Try Catch)",dept:"Technology",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
+  116:{name:"James Gutierrez",title:"Contractor (Try Catch)",dept:"Technology",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
+  117:{name:"Juan Zuluaga",title:"Contractor (Try Catch)",dept:"Technology",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
+  118:{name:"Reed Dunkle",title:"Contractor (Base 2)",dept:"Technology",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
+  119:{name:"Vishnu Boppa",title:"Contractor (Insight Global)",dept:"Technology",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
+  120:{name:"Vivian Osegwegie",title:"Contractor (Insight Global)",dept:"Technology",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
 };
 
-const CONTRACTOR_INFO={
-  "Reed Dunkle":{email:"",howToContact:"Contact Project Lead",projectLead:"Aaron Raymer",projects:"Craft Connect Engineering",expertise:"Engineering",endDate:"6/30/2026"},
-  "Brian Schultek":{email:"",howToContact:"Contact Project Lead",projectLead:"Aaron Raymer",projects:"Craft Connect Engineering",expertise:"Engineering",endDate:"6/30/2026"},
-  "Vivian Osegwegie":{email:"",howToContact:"Contact Project Lead",projectLead:"Aaron Raymer",projects:"Thoughtspot",expertise:"Engineering",endDate:"No end date"},
-  "Vishnu Boppa":{email:"",howToContact:"Contact Project Lead",projectLead:"Aaron Raymer",projects:"Thoughtspot",expertise:"Engineering",endDate:"No end date"},
-  "Chandra Mukkara":{email:"",howToContact:"Contact Project Lead",projectLead:"Aaron Raymer",projects:"Thoughtspot",expertise:"Engineering",endDate:"No end date"},
-  "James Gutierrez":{email:"",howToContact:"Contact Project Lead",projectLead:"Aaron Raymer",projects:"Craft Connect Engineering",expertise:"Engineering",endDate:"11/3/2026"},
-  "Edison Zuluaga":{email:"",howToContact:"Contact Project Lead",projectLead:"Aaron Raymer",projects:"Craft Connect Engineering",expertise:"Engineering",endDate:"6/30/2026"},
-  "Juan Zuluaga":{email:"",howToContact:"Contact Project Lead",projectLead:"Aaron Raymer",projects:"Craft Connect Engineering",expertise:"Engineering",endDate:"6/30/2026"},
-  "Neena Goswamy Mand":{email:"neena.goswamy.mand@crafteducation.com",howToContact:"Contact Contractor Directly",projectLead:"Adam Davis",projects:"Sutter Health",expertise:"Project Management",endDate:"In Process"},
-  "Erin Silver":{email:"erin.silver@crafteducation.com",howToContact:"Quick questions: contractor directly · Meeting: project lead",projectLead:"Adam Davis",projects:"Colorado Partnerships",expertise:"State Strategy",endDate:"8/31/2026"},
-  "Michelle Jewett":{email:"michelle.jewett@crafteducation.com",howToContact:"Contact Contractor Directly",projectLead:"Adam Davis",projects:"State Strategy; Pennsylvania Partnerships",expertise:"State Strategy; Facilitation",endDate:"5/31/2026"},
-  "Amy Lesniak":{email:"amy.lesniak@crafteducation.com",howToContact:"Contact Contractor Directly",projectLead:"Adam Davis",projects:"Internal Process Improvements; RAPIDS",expertise:"Apprenticeship Compliance",endDate:"4/1/2026"},
-  "Erica Love":{email:"erica.barreiro@crafteducation.com",howToContact:"Contact Contractor Directly",projectLead:"Adam Davis",projects:"Walmart/USAF LER Digital Credentials",expertise:"LERs; Digital Credentials",endDate:"8/31/2026"},
-  "M. Brian Peake":{email:"brian@thegreysolutions.com",howToContact:"Contact Erica Love",projectLead:"Adam Davis",projects:"Walmart/USAF LER Digital Credentials",expertise:"Project Management",endDate:"9/27/2026"},
-  "Curtis McGhee":{email:"curtis@thegreysolutions.com",howToContact:"Contact Erica Love",projectLead:"Adam Davis",projects:"Walmart/USAF LER Digital Credentials",expertise:"Project Management",endDate:"9/27/2026"},
-  "Bridgett Willey":{email:"bridgett.willey@crafteducation.com",howToContact:"Contact Project Lead",projectLead:"Catie Brown",projects:"Healthcare Program Tracking",expertise:"Healthcare Apprenticeships",endDate:"4/30/2026"},
-  "Dan McGrew":{email:"dan@mcgrewconsulting.com",howToContact:"Quick questions: contractor directly · Meeting: project lead",projectLead:"Dennis Williamson",projects:"Workforce Partnership Development",expertise:"Workforce Development Boards",endDate:"7/31/2026"},
-  "Sarah Schade":{email:"sarahschade@schadeconsultingllc.com",howToContact:"Quick questions: contractor directly · Meeting: project lead",projectLead:"Dennis Williamson",projects:"Workforce Partnership Development",expertise:"Workforce Development Boards",endDate:"7/31/2026"},
-  "Lauren Rinco":{email:"lauren.runco@solidinfodesign.com",howToContact:"Contact Erica Love",projectLead:"Erica Love",projects:"Walmart/USAF LER Digital Credentials",expertise:"Engineering; LERs; Digital Credentials",endDate:"9/1/2026"},
-  "Robin Reinhardt":{email:"robin.reinhardt@crafteducation.com",howToContact:"Contact Jerry Jasperson / Patty Moore",projectLead:"Jerry Jasperson",projects:"Security Consulting",expertise:"Security; SOC2; Google Workspace",endDate:"No end date"},
-  "D. Palfreyman":{email:"paswani@ctt-education.com",howToContact:"Contact Project Lead",projectLead:"Kimberly Eckert",projects:"Oxford Convenings",expertise:"Events",endDate:"In Process"},
-  "Hudson Baird":{email:"hudson.baird@crafteducation.com",howToContact:"Contact Contractor Directly",projectLead:"Kimberly Eckert",projects:"Oxford Convenings",expertise:"Events",endDate:"3/31/2026"},
-  "Tamika Graham":{email:"tamika.graham@crafteducation.com",howToContact:"Contact Contractor Directly",projectLead:"Mallory Dwinal-Palisch",projects:"Administrative; Special Projects",expertise:"Administrative Support",endDate:"No end date"},
-  "Heather Webb":{email:"heather.webb@crafteducation.com",howToContact:"Contact Contractor Directly",projectLead:"Mallory Dwinal-Palisch",projects:"Foundational Workplace Skills Certificate",expertise:"Strategic Planning",endDate:"7/1/2026"},
-  "Hugh Molotsi":{email:"hugh@molotsi.com",howToContact:"Contact Adam Davis",projectLead:"Mallory Dwinal-Palisch",projects:"General Advisory Services",expertise:"Leadership Advisory",endDate:"6/30/2026"},
-  "Angela Jackson":{email:"angela_jackson@futureforward.institute",howToContact:"Contact Mallory Dwinal-Palisch",projectLead:"Mallory Dwinal-Palisch",projects:"General Advisory Services",expertise:"Leadership Advisory",endDate:"9/1/2026"},
-  "Portia Pratt":{email:"ppratt@nga.org",howToContact:"Contact Adam Davis",projectLead:"Mallory Dwinal-Palisch",projects:"State Level Strategy",expertise:"State Strategy",endDate:"3/31/2026"},
-  "Dr. Paul Bruno":{email:"pbruno@illinois.edu",howToContact:"Contact Project Lead",projectLead:"Patricia Saenz-Armstrong",projects:"State Data Systems Project",expertise:"Research",endDate:"6/30/2026"},
-  "Dr. Tuan Nguyen":{email:"tuan.nguyen@missouri.edu",howToContact:"Contact Project Lead",projectLead:"Patricia Saenz-Armstrong",projects:"State Data Systems; Teacher Shortage Research",expertise:"Research",endDate:"12/31/2026"},
-  "Dr. Joshua Bleiberg":{email:"jbleiber@pitt.edu",howToContact:"Contact Project Lead",projectLead:"Patricia Saenz-Armstrong",projects:"Teacher Shortage Research",expertise:"Research",endDate:"12/31/2026"},
-  "Samantha Lenger":{email:"samantha.lenger@crafteducation.com",howToContact:"Contact Project Lead",projectLead:"Scott Smith",projects:"Social Media Management",expertise:"Social Media",endDate:"8/31/2026"},
-};
-
-const RAW=[
-  {name:"Mallory Dwinal-Palisch",title:"President",manager:null,dept:"Leadership",loc:"Nashville Office",tz:"CT"},
-  {name:"Kymberly Lavigne-Hinkley",title:"National Philanthropic Partnerships Director, WGU Advancement",manager:null,dept:"WGU",loc:"Remote",tz:"ET",wgu:true},
-  {name:"Myka Smith",title:"Senior People & Talent Business Partner",manager:null,dept:"WGU",loc:"SLC Office",tz:"MT",wgu:true},
-  {name:"Emily Evers",title:"Senior People & Talent Generalist",manager:null,dept:"WGU",loc:"SLC Office",tz:"MT",wgu:true},
-  {name:"Mike Henochowicz",title:"Senior Staff Attorney",manager:null,dept:"WGU",loc:"SLC Office",tz:"MT",wgu:true},
-  {name:"Justin Larsen",title:"Senior Financial Analyst",manager:null,dept:"WGU",loc:"SLC Office",tz:"MT",wgu:true},
-  {name:"Jill Jess",title:"Senior Manager, Strategic Communications",manager:null,dept:"WGU",loc:"SLC Office",tz:"MT",wgu:true},
-  {name:"Ryan Stone",title:"Procurement Specialist",manager:null,dept:"WGU",loc:"SLC Office",tz:"MT",wgu:true},
-  {name:"Adam Davis",title:"Chief Operating Officer",manager:"Mallory Dwinal-Palisch",dept:"Leadership",loc:"SLC Office",tz:"MT"},
-  {name:"Marté Williams",title:"Executive Assistant",manager:"Mallory Dwinal-Palisch",dept:"Leadership",loc:"Nashville Office",tz:"CT"},
-  {name:"Contractors",title:"",manager:"Mallory Dwinal-Palisch",dept:"Leadership",loc:"",tz:"",group:true},
-  {name:"Angela Jackson",title:"Contractor",manager:"Contractors",dept:"Leadership",loc:"Remote",tz:"ET",contractor:true},
-  {name:"Heather Webb",title:"Contractor",manager:"Contractors",dept:"Leadership",loc:"Remote",tz:"MT",contractor:true},
-  {name:"Hugh Molotsi",title:"Contractor",manager:"Contractors",dept:"Leadership",loc:"Remote",tz:"MT",contractor:true},
-  {name:"Portia Pratt",title:"Contractor",manager:"Contractors",dept:"Leadership",loc:"Remote",tz:"",contractor:true},
-  {name:"Tamika Graham",title:"Contractor",manager:"Contractors",dept:"Leadership",loc:"Remote",tz:"GMT",contractor:true},
-  {name:"Patty Moore",title:"Head of Product & Technology",manager:"Adam Davis",dept:"Technology",loc:"SLC Office",tz:"MT"},
-  {name:"Melinda Perez",title:"Senior Manager, Business Operations",manager:"Adam Davis",dept:"Business Operations",loc:"Remote",tz:"ET"},
-  {name:"Patricia Saenz-Armstrong",title:"Senior Manager, Data and Research Initiatives",manager:"Adam Davis",dept:"Craft Intelligence",loc:"Remote",tz:"ET"},
-  {name:"TBH 2",title:"Director, Business Development",manager:"Adam Davis",dept:"Partnership Development",loc:"Nashville Office",tz:"CT",tbh:true},
-  {name:"TBH 1",title:"Director, Customer Success & Strategic Implementation",manager:"Adam Davis",dept:"Customer Success",loc:"Nashville Office",tz:"CT",tbh:true},
-  {name:"Amani Ariel-Wamala",title:"Director, Technical Product Management",manager:"Patty Moore",dept:"Product Management",loc:"Remote",tz:"ET"},
-  {name:"Jerry Jasperson",title:"Senior Director, Technology",manager:"Patty Moore",dept:"Technology",loc:"Remote",tz:"MT"},
-  {name:"Kristin Eller",title:"Project Manager, Grants",manager:"Patty Moore",dept:"Technology",loc:"Nashville Office",tz:"CT"},
-  {name:"TBH",title:"Senior Technical Program Manager",manager:"Patty Moore",dept:"Technology",loc:"Nashville Office",tz:"CT",tbh:true},
-  {name:"TBH",title:"Senior Manager, Engineering",manager:"Patty Moore",dept:"Technology",loc:"Nashville Office",tz:"CT",tbh:true},
-  {name:"Alex Mendiola",title:"Staff Software Product Manager",manager:"Amani Ariel-Wamala",dept:"Product Management",loc:"Remote",tz:"ET"},
-  {name:"Amanda Wellner",title:"Lead UX Designer",manager:"Amani Ariel-Wamala",dept:"Product Management",loc:"Remote",tz:"CT"},
-  {name:"Catie Brown",title:"Lead, User Research",manager:"Amani Ariel-Wamala",dept:"Product Management",loc:"Nashville Office",tz:"CT"},
-  {name:"Daniel Foreman",title:"Technical Product Manager",manager:"Amani Ariel-Wamala",dept:"Product Management",loc:"Remote",tz:"MT"},
-  {name:"David Theurer",title:"Principal Software Product Manager",manager:"Amani Ariel-Wamala",dept:"Product Management",loc:"Remote",tz:"MT"},
-  {name:"Jordan Adams",title:"Senior Product Manager",manager:"Amani Ariel-Wamala",dept:"Product Management",loc:"Remote",tz:"MT"},
-  {name:"Lisa Jameson",title:"Senior Product Operations Manager",manager:"Amani Ariel-Wamala",dept:"Product Management",loc:"Nashville Office",tz:"CT"},
-  {name:"Sage Robins",title:"Senior Product Operations Manager",manager:"Amani Ariel-Wamala",dept:"Product Management",loc:"Remote",tz:"MT"},
-  {name:"Samantha Uebel",title:"Lead UX Designer",manager:"Amani Ariel-Wamala",dept:"Product Management",loc:"Remote",tz:"ET"},
-  {name:"Tracy Gillespie",title:"Principal Software Product Manager",manager:"Amani Ariel-Wamala",dept:"Product Management",loc:"Nashville Office",tz:"CT"},
-  {name:"TBH",title:"Senior Manager, Product & User Experience",manager:"Amani Ariel-Wamala",dept:"Product Management",loc:"Nashville Office",tz:"CT",tbh:true},
-  {name:"Bridgett Willey",title:"Contractor",manager:"Catie Brown",dept:"Product Management",loc:"Remote",tz:"CT",contractor:true},
-  {name:"Aaron Raymer",title:"Senior Manager, Technology",manager:"Jerry Jasperson",dept:"Technology",loc:"Remote",tz:"CT"},
-  {name:"Andrew Johnson",title:"Staff Cloud Engineer",manager:"Jerry Jasperson",dept:"Technology",loc:"Remote",tz:"CT"},
-  {name:"Robin Reinhardt",title:"Contractor",manager:"Jerry Jasperson",dept:"Technology",loc:"Remote",tz:"PT",contractor:true},
-  {name:"Alex Paulson",title:"Senior Software Engineer",manager:"Aaron Raymer",dept:"Technology",loc:"Nashville Office",tz:"CT"},
-  {name:"Alex Thornbury",title:"Staff Software Engineer",manager:"Aaron Raymer",dept:"Technology",loc:"Remote",tz:"ET"},
-  {name:"Alyssa Jackson",title:"Senior Software Engineer",manager:"Aaron Raymer",dept:"Technology",loc:"Remote",tz:"ET"},
-  {name:"Andrew Townsend",title:"Senior Software Engineer",manager:"Aaron Raymer",dept:"Technology",loc:"Remote",tz:""},
-  {name:"Brendan Ortmann",title:"Software Engineer II",manager:"Aaron Raymer",dept:"Technology",loc:"Nashville Office",tz:"CT"},
-  {name:"Daniel Lopez",title:"Data Engineer",manager:"Aaron Raymer",dept:"Technology",loc:"Remote",tz:"MT"},
-  {name:"Jonathan Frankel",title:"Senior Software Engineer",manager:"Aaron Raymer",dept:"Technology",loc:"Nashville Office",tz:"CT"},
-  {name:"Michael Buhler",title:"Senior Software Engineer",manager:"Aaron Raymer",dept:"Technology",loc:"Remote",tz:""},
-  {name:"Michael Endsley",title:"Staff Software Engineer",manager:"Aaron Raymer",dept:"Technology",loc:"Remote",tz:"MT"},
-  {name:"Michael Herman",title:"Data Engineer",manager:"Aaron Raymer",dept:"Technology",loc:"Remote",tz:"MT"},
-  {name:"Nick Florin",title:"Senior Software Engineer",manager:"Aaron Raymer",dept:"Technology",loc:"Remote",tz:"ET"},
-  {name:"Sam Schneller",title:"Software Engineer II",manager:"Aaron Raymer",dept:"Technology",loc:"Remote",tz:"ET"},
-  {name:"TBH",title:"Staff Data Engineering",manager:"Aaron Raymer",dept:"Technology",loc:"",tz:"",tbh:true},
-  {name:"TBH",title:"Senior Software Engineer",manager:"Aaron Raymer",dept:"Technology",loc:"",tz:"",tbh:true},
-  {name:"Brian Schultek",title:"Contractor (Base 2)",manager:"Aaron Raymer",dept:"Technology",loc:"Remote",tz:"",contractor:true},
-  {name:"Chandra Mukkara",title:"Contractor (Insight Global)",manager:"Aaron Raymer",dept:"Technology",loc:"Remote",tz:"",contractor:true},
-  {name:"Edison Zuluaga",title:"Contractor (Try Catch)",manager:"Aaron Raymer",dept:"Technology",loc:"Remote",tz:"",contractor:true},
-  {name:"James Gutierrez",title:"Contractor (Try Catch)",manager:"Aaron Raymer",dept:"Technology",loc:"Remote",tz:"",contractor:true},
-  {name:"Juan Zuluaga",title:"Contractor (Try Catch)",manager:"Aaron Raymer",dept:"Technology",loc:"Remote",tz:"",contractor:true},
-  {name:"Reed Dunkle",title:"Contractor (Base 2)",manager:"Aaron Raymer",dept:"Technology",loc:"Remote",tz:"",contractor:true},
-  {name:"Vishnu Boppa",title:"Contractor (Insight Global)",manager:"Aaron Raymer",dept:"Technology",loc:"Remote",tz:"",contractor:true},
-  {name:"Vivian Osegwegie",title:"Contractor (Insight Global)",manager:"Aaron Raymer",dept:"Technology",loc:"Remote",tz:"",contractor:true},
-  {name:"Katelyn Kleinpeter",title:"Workforce Partnerships & Operations Lead",manager:"Melinda Perez",dept:"Business Operations",loc:"Remote",tz:"CT"},
-  {name:"Reina Beach",title:"Business Operations Manager",manager:"Melinda Perez",dept:"Business Operations",loc:"Nashville Office",tz:"CT"},
-  {name:"Jorge Ugaz",title:"Senior Research Scientist",manager:"Patricia Saenz-Armstrong",dept:"Craft Intelligence",loc:"Remote",tz:"ET"},
-  {name:"Nell Williams",title:"Senior Research Analyst",manager:"Patricia Saenz-Armstrong",dept:"Craft Intelligence",loc:"Remote",tz:"ET"},
-  {name:"Stephanie Quinn",title:"Senior Business Analyst",manager:"Patricia Saenz-Armstrong",dept:"Craft Intelligence",loc:"Remote",tz:"CT"},
-  {name:"Dr. Joshua Bleiberg",title:"Contractor",manager:"Patricia Saenz-Armstrong",dept:"Craft Intelligence",loc:"Remote",tz:"ET",contractor:true},
-  {name:"Dr. Paul Bruno",title:"Contractor",manager:"Patricia Saenz-Armstrong",dept:"Craft Intelligence",loc:"Remote",tz:"",contractor:true},
-  {name:"Dr. Tuan Nguyen",title:"Contractor",manager:"Patricia Saenz-Armstrong",dept:"Craft Intelligence",loc:"Remote",tz:"CT",contractor:true},
-  {name:"Kimberly Eckert",title:"Senior Manager, Instructional Innovation & Apprenticeship Design",manager:"TBH 1",dept:"Instructional Innovation",loc:"Remote",tz:"CT"},
-  {name:"Melanie Flowers",title:"Senior Manager, Workforce and WIOA",manager:"TBH 1",dept:"Workforce & WIOA",loc:"Remote",tz:"CT"},
-  {name:"Victoria Lawrence",title:"Senior Manager, Customer Success",manager:"TBH 1",dept:"Customer Success",loc:"Remote",tz:"ET"},
-  {name:"Craft Consulting Team",title:"",manager:"TBH 1",dept:"Craft Consulting",loc:"",tz:"",group:true},
-  {name:"Amy Lesniak",title:"Contractor",manager:"Craft Consulting Team",dept:"Craft Consulting",loc:"Remote",tz:"CT",contractor:true},
-  {name:"Curtis McGhee",title:"Contractor (Grey Solutions)",manager:"Craft Consulting Team",dept:"Craft Consulting",loc:"Remote",tz:"ET",contractor:true},
-  {name:"Erica Love",title:"Contractor",manager:"Craft Consulting Team",dept:"Craft Consulting",loc:"Remote",tz:"CT",contractor:true},
-  {name:"Erin Silver",title:"Contractor (Envision Strategy Group)",manager:"Craft Consulting Team",dept:"Craft Consulting",loc:"Remote",tz:"MT",contractor:true},
-  {name:"Joyce Milling",title:"Apprenticeship Program Development Advisor",manager:"Craft Consulting Team",dept:"Craft Consulting",loc:"Remote",tz:"ET"},
-  {name:"M. Brian Peake",title:"Contractor (Grey Solutions)",manager:"Craft Consulting Team",dept:"Craft Consulting",loc:"Remote",tz:"CT",contractor:true},
-  {name:"Mamie Williams",title:"Nursing Pathway Development Advisor",manager:"Craft Consulting Team",dept:"Craft Consulting",loc:"Nashville Office",tz:"CT"},
-  {name:"Michelle Jewett",title:"Apprenticeship Program Development Advisor",manager:"Craft Consulting Team",dept:"Craft Consulting",loc:"Remote",tz:"MT"},
-  {name:"MK Sagaria-Barritt",title:"Apprenticeship Program Development Advisor",manager:"Craft Consulting Team",dept:"Craft Consulting",loc:"Remote",tz:"MT"},
-  {name:"Neena Goswamy Mand",title:"Contractor",manager:"Craft Consulting Team",dept:"Craft Consulting",loc:"Remote",tz:"PT",contractor:true},
-  {name:"Lauren Rinco",title:"Contractor (SOLID)",manager:"Erica Love",dept:"Craft Consulting",loc:"Remote",tz:"ET",contractor:true},
-  {name:"Dennis Williamson",title:"Manager, Workforce Partnership Development",manager:"TBH 2",dept:"Workforce Partnership",loc:"Remote",tz:"CT"},
-  {name:"Jenn Mathis",title:"Senior Manager, Sales",manager:"TBH 2",dept:"Partnership Development",loc:"Remote",tz:"ET"},
-  {name:"Karen Riddell",title:"Senior Technical Sales Engineer",manager:"TBH 2",dept:"Solution Engineering",loc:"Nashville Office",tz:"CT"},
-  {name:"Scott Smith",title:"Senior Manager, Technical Marketing",manager:"TBH 2",dept:"Marketing",loc:"Remote",tz:"ET"},
-  {name:"Chloe Sun",title:"Lead Customer Success Coordinator",manager:"Victoria Lawrence",dept:"Customer Success",loc:"Remote",tz:"ET"},
-  {name:"Gigi Arnone",title:"Customer Operations Analyst",manager:"Victoria Lawrence",dept:"Customer Success",loc:"Remote",tz:"MT"},
-  {name:"Jacob Clark",title:"Senior Customer Success Manager",manager:"Victoria Lawrence",dept:"Customer Success",loc:"Remote",tz:"ET"},
-  {name:"TBH",title:"Customer Onboarding Specialist",manager:"Victoria Lawrence",dept:"Customer Success",loc:"",tz:"",tbh:true},
-  {name:"TBH",title:"Customer Onboarding Specialist",manager:"Victoria Lawrence",dept:"Customer Success",loc:"",tz:"",tbh:true},
-  {name:"Raven Harris",title:"Workforce Partnerships & Operations Lead",manager:"Kimberly Eckert",dept:"Instructional Innovation",loc:"Remote",tz:"CT"},
-  {name:"Teryn Bryant",title:"Workforce Research & Implementation Lead",manager:"Kimberly Eckert",dept:"Instructional Innovation",loc:"Remote",tz:"CT"},
-  {name:"D. Palfreyman",title:"Contractor (Center for Tutorial Teaching)",manager:"Kimberly Eckert",dept:"Instructional Innovation",loc:"Remote",tz:"GMT",contractor:true},
-  {name:"Hudson Baird",title:"Contractor",manager:"Kimberly Eckert",dept:"Instructional Innovation",loc:"Remote",tz:"CT",contractor:true},
-  {name:"Addison Watson",title:"Manager, Regional Workforce Development Board Partner Success",manager:"Melanie Flowers",dept:"Workforce & WIOA",loc:"Remote",tz:"CT"},
-  {name:"Geralyn Smith",title:"Research Analyst",manager:"Melanie Flowers",dept:"Workforce & WIOA",loc:"Remote",tz:"CT"},
-  {name:"Robert Owens",title:"Senior Strategic Partnerships Manager",manager:"Jenn Mathis",dept:"Partnership Development",loc:"Remote",tz:"ET"},
-  {name:"Ryan Shellen",title:"Manager, Technical Sales Account Executive",manager:"Jenn Mathis",dept:"Partnership Development",loc:"Remote",tz:"MT"},
-  {name:"Sonia Cassatt",title:"Senior Technical Partnerships Manager, K12",manager:"Jenn Mathis",dept:"Partnership Development",loc:"Remote",tz:"PT"},
-  {name:"Daniel Saunders",title:"Business Development Representative",manager:"Ryan Shellen",dept:"Partnership Development",loc:"Remote",tz:"ET"},
-  {name:"Ray Valenzuela",title:"Business Development Representative",manager:"Ryan Shellen",dept:"Partnership Development",loc:"Remote",tz:"CT"},
-  {name:"Adam Marinelli",title:"Regional Workforce Development Board Manager",manager:"Dennis Williamson",dept:"Workforce Partnership",loc:"Remote",tz:"ET"},
-  {name:"Wendy Parker",title:"Regional Workforce Development Board Manager",manager:"Dennis Williamson",dept:"Workforce Partnership",loc:"Remote",tz:"ET"},
-  {name:"Dan McGrew",title:"Contractor",manager:"Dennis Williamson",dept:"Workforce Partnership",loc:"Remote",tz:"ET",contractor:true},
-  {name:"Sarah Schade",title:"Contractor",manager:"Dennis Williamson",dept:"Workforce Partnership",loc:"Remote",tz:"CT",contractor:true},
-  {name:"Manoj Kumar Reddy Kondreddygari",title:"Marketing Associate",manager:"Scott Smith",dept:"Marketing",loc:"Remote",tz:"ET"},
-  {name:"Samantha Lenger",title:"Contractor (Saturday Media)",manager:"Scott Smith",dept:"Marketing",loc:"Remote",tz:"ET",contractor:true},
-];
-
-const employees=RAW.map((r,i)=>({...r,id:String(i+1),reports:[]}));
-const byName={};
-employees.forEach(e=>{byName[e.name]=e;});
-employees.forEach(e=>{if(e.manager&&byName[e.manager]&&!e.wgu)byName[e.manager].reports.push(e.id);});
+const employees=Object.entries(TREE).map(([id,node])=>({id:String(id),name:node.name,title:node.title,dept:node.dept,loc:node.loc,tz:node.tz,reports:node.children.map(String),manager:null,...node.flags}));
 const byId=Object.fromEntries(employees.map(e=>[e.id,e]));
-employees.forEach(e=>{
-  if(e.group)e.title=`Group · ${e.reports.length} members`;
-  e.reports.sort((a,b)=>{const s=x=>byId[x].tbh?2:byId[x].contractor?1:0;return s(a)-s(b);});
-});
-const craftRoot=employees.find(e=>!e.manager&&!e.wgu);
-const wguMembers=employees.filter(e=>e.wgu);
+const byName=Object.fromEntries(employees.map(e=>[e.name,e]));
+Object.entries(TREE).forEach(([parentId,node])=>{node.children.forEach(childId=>{const child=byId[String(childId)];if(child)child.manager=node.name;});});
+employees.forEach(e=>{if(e.group)e.title=`Group · ${e.reports.length} members`;});
+const wguMembers=[2,3,4,5,6,7,8,9].map(id=>byId[String(id)]);
+const craftRoot=byId["1"];
 const craftEmps=employees.filter(e=>!e.wgu);
 const HIDDEN_DEPTS=new Set(["Business Development","Grant Administration","Product & Technology","Executive Leadership","WGU"]);
 const usedDepts=["All","Leadership",...[...new Set(craftEmps.map(e=>e.dept))].filter(d=>d&&d!=="Leadership"&&!HIDDEN_DEPTS.has(d)).sort(),"WGU","Contractors","Open Roles"];
@@ -202,11 +159,7 @@ const usedDepts=["All","Leadership",...[...new Set(craftEmps.map(e=>e.dept))].fi
 function Logo(){return(<div style={{width:36,height:36,background:"#fff",borderRadius:8,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}><svg viewBox="0 0 120 110" width="34" height="34" xmlns="http://www.w3.org/2000/svg"><line x1="60" y1="36" x2="60" y2="22" stroke="#C8D5E0" strokeWidth="3.5"/><line x1="60" y1="72" x2="60" y2="86" stroke="#C8D5E0" strokeWidth="3.5"/><line x1="36" y1="54" x2="22" y2="54" stroke="#C8D5E0" strokeWidth="3.5"/><line x1="84" y1="54" x2="98" y2="54" stroke="#C8D5E0" strokeWidth="3.5"/><line x1="80" y1="36" x2="92" y2="18" stroke="#C8D5E0" strokeWidth="3"/><line x1="40" y1="72" x2="28" y2="88" stroke="#C8D5E0" strokeWidth="3"/><rect x="36" y="36" width="48" height="36" rx="9" fill="#002855"/><rect x="42" y="2" width="36" height="22" rx="7" fill="#46B1EF"/><rect x="42" y="86" width="36" height="22" rx="7" fill="#46B1EF"/><rect x="0" y="38" width="24" height="32" rx="7" fill="#0070F0"/><rect x="96" y="38" width="24" height="32" rx="7" fill="#0070F0"/><rect x="88" y="2" width="22" height="20" rx="6" fill="#97E152"/><rect x="10" y="86" width="22" height="20" rx="6" fill="#97E152"/></svg></div>);}
 
 const ini=e=>e.tbh?"?":e.group?"⊞":e.contractor?"C":e.name.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
-function Avatar({emp,size=36}){
-  const bg=emp.tbh?BRAND.gray:emp.wgu?BRAND.sky:emp.contractor?"#f0f4f8":dc(emp.dept);
-  const col=emp.contractor?BRAND.textMuted:emp.tbh?BRAND.textMuted:BRAND.white;
-  return(<div style={{width:size,height:size,borderRadius:emp.group?8:"50%",background:bg,color:col,display:"flex",alignItems:"center",justifyContent:"center",fontSize:emp.group?size*0.5:size*0.34,fontWeight:700,flexShrink:0,letterSpacing:"-0.02em",border:emp.contractor?`2px dashed ${dc(emp.dept)}`:emp.tbh?`2px dashed ${BRAND.textMuted}`:"none"}}>{ini(emp)}</div>);
-}
+function Avatar({emp,size=36}){const bg=emp.tbh?BRAND.gray:emp.wgu?BRAND.sky:emp.contractor?"#f0f4f8":dc(emp.dept);const col=emp.contractor?BRAND.textMuted:emp.tbh?BRAND.textMuted:BRAND.white;return(<div style={{width:size,height:size,borderRadius:emp.group?8:"50%",background:bg,color:col,display:"flex",alignItems:"center",justifyContent:"center",fontSize:emp.group?size*0.5:size*0.34,fontWeight:700,flexShrink:0,letterSpacing:"-0.02em",border:emp.contractor?`2px dashed ${dc(emp.dept)}`:emp.tbh?`2px dashed ${BRAND.textMuted}`:"none"}}>{ini(emp)}</div>);}
 
 function Card({emp,onSelect,isRoot=false,faded=false}){
   const[hov,setHov]=useState(false);
@@ -221,19 +174,13 @@ const INDENT=28;
 function nodeOrDesc(emp,fn){if(fn(emp))return true;return emp.reports.map(id=>byId[id]).filter(Boolean).some(c=>nodeOrDesc(c,fn));}
 
 function TreeNode({emp,depth,expanded,onToggle,onSelect}){
-  const isExp=expanded.has(emp.id);
-  const ch=emp.reports.map(id=>byId[id]).filter(Boolean);
+  const isExp=expanded.has(emp.id);const ch=emp.reports.map(id=>byId[id]).filter(Boolean);
   return(<div><div style={{display:"flex",alignItems:"center",paddingLeft:depth*INDENT,marginBottom:4,position:"relative"}}>{depth>0&&<div style={{position:"absolute",left:depth*INDENT-14,top:"50%",transform:"translateY(-50%)",width:10,height:1,background:BRAND.gray}}/>}<div style={{flex:1,minWidth:0,maxWidth:520}}><Card emp={emp} onSelect={onSelect} isRoot={depth===0}/></div>{ch.length>0&&<div onClick={e=>{e.stopPropagation();onToggle(emp);}} style={{flexShrink:0,width:24,height:24,borderRadius:"50%",marginLeft:8,background:isExp?BRAND.blue:BRAND.canvas,color:isExp?BRAND.white:BRAND.textMuted,fontSize:10.5,fontWeight:700,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",transition:"all 0.15s",border:isExp?"none":`1.5px solid ${BRAND.gray}`,boxShadow:isExp?`0 2px 6px ${BRAND.blue}55`:"none"}}>{ch.length}</div>}</div>{isExp&&ch.length>0&&<div style={{position:"relative"}}><div style={{position:"absolute",left:(depth+1)*INDENT-14,top:0,bottom:8,width:1,background:BRAND.gray}}/>{ch.map(c=><TreeNode key={c.id} emp={c} depth={depth+1} expanded={expanded} onToggle={onToggle} onSelect={onSelect}/>)}</div>}</div>);
 }
 
 function FilteredNode({emp,depth,onSelect,matchFn}){
-  const sm=matchFn(emp);
-  const ch=emp.reports.map(id=>byId[id]).filter(Boolean);
-  const mc=ch.filter(c=>nodeOrDesc(c,matchFn));
-  const isAnc=!sm&&mc.length>0;
-  if(!sm&&mc.length===0)return null;
-  const show=sm||isAnc;
-  const nd=show?depth+1:depth;
+  const sm=matchFn(emp);const ch=emp.reports.map(id=>byId[id]).filter(Boolean);const mc=ch.filter(c=>nodeOrDesc(c,matchFn));const isAnc=!sm&&mc.length>0;
+  if(!sm&&mc.length===0)return null;const show=sm||isAnc;const nd=show?depth+1:depth;
   return(<div>{show&&<div style={{display:"flex",alignItems:"center",paddingLeft:depth*INDENT,marginBottom:4,position:"relative"}}>{depth>0&&<div style={{position:"absolute",left:depth*INDENT-14,top:"50%",transform:"translateY(-50%)",width:10,height:1,background:BRAND.gray}}/>}<div style={{flex:1,minWidth:0,maxWidth:520}}><Card emp={emp} onSelect={onSelect} isRoot={depth===0} faded={isAnc}/></div></div>}{mc.length>0&&<div style={{position:"relative"}}><div style={{position:"absolute",left:nd*INDENT-14,top:0,bottom:8,width:1,background:BRAND.gray}}/>{mc.map(c=><FilteredNode key={c.id} emp={c} depth={nd} onSelect={onSelect} matchFn={matchFn}/>)}</div>}</div>);
 }
 
@@ -244,15 +191,13 @@ function ListView({onSelect,activeDept,searchTerm}){
   const mFn=emp=>{const ms=!s||emp.name.toLowerCase().includes(s)||emp.title.toLowerCase().includes(s)||emp.dept.toLowerCase().includes(s);const md=activeDept==="All"||(activeDept==="WGU"&&emp.wgu)||(activeDept==="Contractors"&&emp.contractor)||(activeDept==="Open Roles"&&emp.tbh)||(!emp.wgu&&!emp.group&&emp.dept===activeDept);return ms&&md;};
   const showWGU=activeDept==="All"||activeDept==="WGU";
   const showDepts=activeDept!=="WGU"&&activeDept!=="Contractors"&&activeDept!=="Open Roles";
-  const showC=activeDept==="Contractors";
-  const showOR=activeDept==="Open Roles";
+  const showC=activeDept==="Contractors";const showOR=activeDept==="Open Roles";
   const dm={};craftEmps.filter(e=>!e.group).forEach(e=>{if(!dm[e.dept])dm[e.dept]=[];dm[e.dept].push(e);});
   const dk=Object.keys(dm).filter(d=>activeDept==="All"||d===activeDept);
   const allC=employees.filter(e=>e.contractor&&(!s||e.name.toLowerCase().includes(s)||e.title.toLowerCase().includes(s)||e.dept.toLowerCase().includes(s)));
-  const allOR=employees.filter(e=>e.tbh&&(!s||e.title.toLowerCase().includes(s)||e.dept.toLowerCase().includes(s)));
-  const InfoRow=({icon,label,val})=>(<div style={{display:"flex",gap:10,marginBottom:13}}><span style={{fontSize:15,flexShrink:0}}>{icon}</span><div style={{minWidth:0}}><div style={{fontSize:9.5,color:BRAND.textMuted,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.06em"}}>{label}</div><div style={{fontSize:12,color:BRAND.navy,marginTop:1,wordBreak:"break-word"}}>{val}</div></div></div>);
+  const allOR=[...employees.filter(e=>e.tbh&&e.manager==="Adam Davis"),...employees.filter(e=>e.tbh&&e.manager==="Patty Moore"),...employees.filter(e=>e.tbh&&e.manager!=="Adam Davis"&&e.manager!=="Patty Moore")].filter(e=>!s||e.title.toLowerCase().includes(s)||e.dept.toLowerCase().includes(s));
   return(<div style={{padding:"24px 32px",maxWidth:820,margin:"0 auto"}}>
-    {showWGU&&<div style={{marginBottom:28}}><div style={{display:"flex",alignItems:"center",gap:8,marginBottom:10}}><div style={{width:8,height:8,borderRadius:"50%",background:BRAND.sky}}/><h3 style={{margin:0,fontSize:13,fontWeight:800,color:BRAND.navy}}>Extended Team (WGU Partners)</h3><span style={{fontSize:11,color:BRAND.textMuted}}>affiliated · not direct reports</span></div>{wguMembers.filter(mFn).map(emp=>(<div key={emp.id} onClick={()=>onSelect(emp)} style={{display:"flex",alignItems:"center",gap:12,marginBottom:5,background:"#EEF7FD",border:`1.5px dashed ${BRAND.sky}`,borderLeft:`4px solid ${BRAND.sky}`,borderRadius:10,padding:"9px 14px",cursor:"pointer",transition:"box-shadow 0.12s"}} onMouseEnter={e=>e.currentTarget.style.boxShadow=`0 2px 10px ${BRAND.sky}33`} onMouseLeave={e=>e.currentTarget.style.boxShadow="none"}><Avatar emp={emp} size={32}/><div style={{flex:1,minWidth:0}}><div style={{fontWeight:600,fontSize:13,color:BRAND.navy,fontStyle:"italic"}}>{emp.name}</div><div style={{fontSize:11,color:BRAND.textMuted,marginTop:1}}>{emp.title}</div><div style={{fontSize:10,color:BRAND.sky,marginTop:2}}>{emp.loc} · {emp.tz}</div></div></div>))}</div>}
+    {showWGU&&<div style={{marginBottom:28}}><div style={{display:"flex",alignItems:"center",gap:8,marginBottom:10}}><div style={{width:8,height:8,borderRadius:"50%",background:BRAND.sky}}/><h3 style={{margin:0,fontSize:13,fontWeight:800,color:BRAND.navy}}>Extended Team (WGU Partners)</h3><span style={{fontSize:11,color:BRAND.textMuted}}>affiliated · not direct reports</span></div>{wguMembers.filter(mFn).map(emp=>(<div key={emp.id} onClick={()=>onSelect(emp)} style={{display:"flex",alignItems:"center",gap:12,marginBottom:5,background:"#EEF7FD",border:`1.5px dashed ${BRAND.sky}`,borderLeft:`4px solid ${BRAND.sky}`,borderRadius:10,padding:"9px 14px",cursor:"pointer",transition:"box-shadow 0.12s"}} onMouseEnter={e=>e.currentTarget.style.boxShadow=`0 2px 10px ${BRAND.sky}33`} onMouseLeave={e=>e.currentTarget.style.boxShadow="none"}><Avatar emp={emp} size={32}/><div style={{flex:1,minWidth:0}}><div style={{fontWeight:600,fontSize:13,color:BRAND.navy,fontStyle:"italic"}}>{emp.name}</div><div style={{fontSize:11,color:BRAND.textMuted,marginTop:1}}>{emp.title}</div><div style={{fontSize:10,color:BRAND.sky,marginTop:2}}>{emp.loc}{emp.tz?` · ${emp.tz}`:""}</div></div></div>))}</div>}
     {showOR&&<div style={{marginBottom:28}}><div style={{display:"flex",alignItems:"center",gap:8,marginBottom:10}}><div style={{width:8,height:8,borderRadius:"50%",background:BRAND.lime}}/><h3 style={{margin:0,fontSize:13,fontWeight:800,color:BRAND.navy}}>Open Roles</h3><span style={{fontSize:11,color:BRAND.textMuted}}>{allOR.length} roles</span></div>{allOR.map(emp=>{const color=dc(emp.dept);const mgr=emp.manager?byName[emp.manager]:null;return(<div key={emp.id} onClick={()=>onSelect(emp)} style={{display:"flex",alignItems:"center",gap:12,marginBottom:5,background:BRAND.white,border:`2px dashed ${color}`,borderLeft:`4px solid ${color}`,borderRadius:10,padding:"9px 14px",cursor:"pointer",transition:"box-shadow 0.12s"}} onMouseEnter={e=>e.currentTarget.style.boxShadow=`0 2px 10px ${color}30`} onMouseLeave={e=>e.currentTarget.style.boxShadow="none"}><div style={{width:32,height:32,borderRadius:"50%",background:BRAND.gray,display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>?</div><div style={{flex:1,minWidth:0}}><div style={{fontWeight:600,fontSize:13,color:BRAND.navy,display:"flex",alignItems:"center",gap:6}}>Open Role<span style={{fontSize:9,fontWeight:900,background:BRAND.lime,color:"#1a3300",borderRadius:4,padding:"1px 5px"}}>OPEN</span></div><div style={{fontSize:11,color:BRAND.textMuted,marginTop:1}}>{emp.title}</div><div style={{fontSize:10,color,marginTop:3,display:"flex",alignItems:"center",gap:4}}><span style={{width:6,height:6,borderRadius:"50%",background:color,display:"inline-block",flexShrink:0}}/>{[emp.dept,mgr?`Reports to: ${mgr.name}`:null].filter(Boolean).join(" · ")}</div></div></div>);})}</div>}
     {showC&&<div style={{marginBottom:28}}><div style={{display:"flex",alignItems:"center",gap:8,marginBottom:10}}><div style={{width:8,height:8,borderRadius:"50%",background:BRAND.textMuted}}/><h3 style={{margin:0,fontSize:13,fontWeight:800,color:BRAND.navy}}>Contractors</h3><span style={{fontSize:11,color:BRAND.textMuted}}>{allC.length} people</span></div>{allC.map(emp=>{const color=dc(emp.dept);const meta=[emp.dept,emp.loc,emp.tz].filter(Boolean).join(" · ");return(<div key={emp.id} onClick={()=>onSelect(emp)} style={{display:"flex",alignItems:"center",gap:12,marginBottom:5,background:`repeating-linear-gradient(45deg,#fff,#fff 4px,#f5f7fa 4px,#f5f7fa 8px)`,border:`1.5px dashed ${color}`,borderLeft:`4px solid ${color}`,borderRadius:10,padding:"9px 14px",cursor:"pointer",transition:"box-shadow 0.12s"}} onMouseEnter={e=>e.currentTarget.style.boxShadow=`0 2px 10px ${color}30`} onMouseLeave={e=>e.currentTarget.style.boxShadow="none"}><Avatar emp={emp} size={32}/><div style={{flex:1,minWidth:0}}><div style={{fontWeight:500,fontSize:13,color:BRAND.navy,display:"flex",alignItems:"center",gap:6}}>{emp.name}<span style={{fontSize:9,background:"#e8edf2",color:BRAND.textMuted,borderRadius:4,padding:"1px 5px",fontWeight:700,border:`1px solid ${BRAND.gray}`}}>CONTRACTOR</span></div><div style={{fontSize:11,color:BRAND.textMuted,marginTop:1}}>{emp.title}</div><div style={{fontSize:10,color,marginTop:3,display:"flex",alignItems:"center",gap:4}}><span style={{width:6,height:6,borderRadius:"50%",background:color,display:"inline-block",flexShrink:0}}/>{meta}</div></div></div>);})}</div>}
     {showDepts&&dk.map(dept=>{const color=dc(dept);const filtered=dm[dept].filter(mFn);if(!filtered.length)return null;const sorted=[...filtered.filter(e=>!e.contractor&&!e.tbh&&e.reports.length>0),...filtered.filter(e=>!e.contractor&&!e.tbh&&e.reports.length===0),...filtered.filter(e=>e.tbh),...filtered.filter(e=>e.contractor)];return(<div key={dept} style={{marginBottom:26}}><div style={{display:"flex",alignItems:"center",gap:7,marginBottom:10}}><div style={{width:8,height:8,borderRadius:"50%",background:color}}/><h3 style={{margin:0,fontSize:13,fontWeight:800,color:BRAND.navy}}>{dept}</h3><span style={{fontSize:11,color:BRAND.textMuted}}>{filtered.length} people</span></div>{sorted.map(emp=>{const isMgr=emp.reports.length>0;const meta=[emp.dept,emp.loc,emp.tz].filter(Boolean).join(" · ");const cbg=emp.contractor?`repeating-linear-gradient(45deg,#fff,#fff 4px,#f5f7fa 4px,#f5f7fa 8px)`:BRAND.white;return(<div key={emp.id} onClick={()=>onSelect(emp)} style={{display:"flex",alignItems:"center",gap:12,marginLeft:isMgr?0:20,marginBottom:5,background:cbg,border:emp.tbh?`1.5px dashed ${color}`:emp.contractor?`1.5px dashed ${color}`:`1px solid ${BRAND.gray}`,borderLeft:`4px solid ${isMgr?color:color+"60"}`,borderRadius:10,padding:"9px 14px",cursor:"pointer",transition:"box-shadow 0.12s"}} onMouseEnter={e=>e.currentTarget.style.boxShadow=`0 2px 10px ${color}30`} onMouseLeave={e=>e.currentTarget.style.boxShadow="none"}><Avatar emp={emp} size={32}/><div style={{flex:1,minWidth:0}}><div style={{fontWeight:isMgr?700:500,fontSize:13,color:emp.tbh?BRAND.textMuted:BRAND.navy,display:"flex",alignItems:"center",gap:6}}>{emp.tbh?"Open Role":emp.name}{isMgr&&!emp.contractor&&<span style={{fontSize:9,background:color+"18",color,borderRadius:4,padding:"1px 5px",fontWeight:700}}>Manager</span>}{emp.tbh&&<span style={{fontSize:9,background:BRAND.lime+"44",color:"#2a4a00",borderRadius:4,padding:"1px 5px",fontWeight:700}}>OPEN</span>}{emp.contractor&&<span style={{fontSize:9,background:"#e8edf2",color:BRAND.textMuted,borderRadius:4,padding:"1px 5px",fontWeight:700,border:`1px solid ${BRAND.gray}`}}>CONTRACTOR</span>}</div><div style={{fontSize:11,color:BRAND.textMuted,marginTop:1}}>{emp.title}</div><div style={{fontSize:10,color,marginTop:3,display:"flex",alignItems:"center",gap:4}}><span style={{width:6,height:6,borderRadius:"50%",background:color,display:"inline-block",flexShrink:0}}/>{meta}</div></div></div>);})}</div>);})}
@@ -280,7 +225,7 @@ function DetailPanel({emp,onClose,onSelect}){
     </div>
     <div style={{flex:1,overflowY:"auto",padding:18}}>
       {!emp.group&&!emp.contractor&&!emp.wgu&&[["🏢","Department",emp.dept],["📍","Location",emp.loc],emp.tz?["🕒","Timezone",emp.tz]:null,manager?["👤","Reports to",manager.name]:null].filter(Boolean).map(([i,l,v])=><Row key={l} icon={i} label={l} val={v}/>)}
-      {emp.wgu&&[wInfo.email?["✉️","Email",wInfo.email]:null,wInfo.role?["🎯","Role at Craft",wInfo.role]:null,["📍","Location",emp.loc],emp.tz?["🕒","Timezone",emp.tz]:null].filter(Boolean).map(([i,l,v])=><Row key={l} icon={i} label={l} val={v}/>)}
+      {emp.wgu&&[wInfo.email?["✉️","Email",wInfo.email]:null,wInfo.role?["🎯","Role at Craft",wInfo.role]:null,emp.loc?["📍","Location",emp.loc]:null,emp.tz?["🕒","Timezone",emp.tz]:null].filter(Boolean).map(([i,l,v])=><Row key={l} icon={i} label={l} val={v}/>)}
       {emp.contractor&&[cInfo.howToContact?["📬","How to Contact",cInfo.howToContact]:null,cInfo.email&&!cInfo.howToContact?.toLowerCase().includes("project lead")?["✉️","Email",cInfo.email]:null,cInfo.projects?["📋","Project(s)",cInfo.projects]:null,cInfo.expertise?["🎯","Expertise",cInfo.expertise]:null,cInfo.projectLead?["👤","Project Lead",cInfo.projectLead]:null,cInfo.endDate?["📅","Contract End",cInfo.endDate]:null,emp.loc?["📍","Location",emp.loc]:null].filter(Boolean).map(([i,l,v])=><Row key={l} icon={i} label={l} val={v}/>)}
       {reports.length>0&&<div style={{marginTop:emp.group?0:18}}><h4 style={{margin:"0 0 10px",fontSize:11,color:BRAND.textMuted,textTransform:"uppercase",letterSpacing:"0.07em",fontWeight:700}}>{emp.group?"Members":"Direct Reports"} ({reports.length})</h4>{reports.map(r=>(<div key={r.id} onClick={()=>onSelect(r)} style={{display:"flex",gap:9,alignItems:"center",padding:"7px 10px",borderRadius:8,cursor:"pointer",border:`1px solid ${BRAND.gray}`,marginBottom:5,transition:"background 0.12s"}} onMouseEnter={e=>e.currentTarget.style.background=BRAND.canvas} onMouseLeave={e=>e.currentTarget.style.background=BRAND.white}><Avatar emp={r} size={28}/><div style={{flex:1,minWidth:0}}><div style={{fontSize:12,fontWeight:600,color:r.tbh?BRAND.textMuted:BRAND.navy,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",display:"flex",alignItems:"center",gap:5}}>{r.tbh?"Open Role":r.name}{r.contractor&&<span style={{fontSize:9,background:"#e8edf2",color:BRAND.textMuted,borderRadius:4,padding:"1px 4px",border:`1px solid ${BRAND.gray}`}}>C</span>}</div><div style={{fontSize:10.5,color:BRAND.textMuted}}>{r.title}</div></div><span style={{fontSize:12,color:BRAND.textMuted}}>›</span></div>))}</div>}
     </div>
@@ -316,9 +261,7 @@ function App(){
           <div style={{display:"flex",alignItems:"center",gap:10}}><Logo/><div><div style={{color:BRAND.white,fontWeight:800,fontSize:15,letterSpacing:"-0.02em",lineHeight:1}}>Craft</div><div style={{color:"#4a7aaa",fontSize:11,marginTop:1}}>Org Chart 2026</div></div></div>
           <div style={{display:"flex",background:"rgba(255,255,255,0.08)",borderRadius:8,padding:3}}>{[["tree","⬡ Tree"],["list","☰ List"]].map(([v,lbl])=>(<button key={v} onClick={()=>setView(v)} style={{padding:"4px 13px",borderRadius:6,border:"none",background:view===v?BRAND.blue:"transparent",color:view===v?BRAND.white:"rgba(255,255,255,0.6)",fontSize:11,fontWeight:600,cursor:"pointer",transition:"all 0.15s"}}>{lbl}</button>))}</div>
         </div>
-        <div style={{display:"flex",flexWrap:"wrap",gap:5}}>
-          {usedDepts.map(d=>{const active=activeDept===d;const c=d==="All"?BRAND.blue:d==="WGU"?BRAND.sky:d==="Contractors"?"#6B7A90":d==="Open Roles"?BRAND.lime:dc(d);return(<span key={d} style={{display:"flex",alignItems:"center",gap:5}}>{d==="WGU"&&<span style={{width:1,height:18,background:"rgba(255,255,255,0.2)",display:"inline-block",marginRight:2}}/>}<button onClick={()=>setActiveDept(d)} style={{padding:"4px 12px",borderRadius:20,border:active?`1.5px solid ${c}`:"1.5px solid transparent",background:active?c:"rgba(255,255,255,0.08)",color:active?BRAND.white:"rgba(255,255,255,0.6)",fontSize:11,fontWeight:600,cursor:"pointer",whiteSpace:"nowrap",transition:"all 0.15s"}}>{d}</button></span>);})}
-        </div>
+        <div style={{display:"flex",flexWrap:"wrap",gap:5}}>{usedDepts.map(d=>{const active=activeDept===d;const c=d==="All"?BRAND.blue:d==="WGU"?BRAND.sky:d==="Contractors"?"#6B7A90":d==="Open Roles"?BRAND.lime:dc(d);return(<span key={d} style={{display:"flex",alignItems:"center",gap:5}}>{d==="WGU"&&<span style={{width:1,height:18,background:"rgba(255,255,255,0.2)",display:"inline-block",marginRight:2}}/>}<button onClick={()=>setActiveDept(d)} style={{padding:"4px 12px",borderRadius:20,border:active?`1.5px solid ${c}`:"1.5px solid transparent",background:active?c:"rgba(255,255,255,0.08)",color:active?BRAND.white:"rgba(255,255,255,0.6)",fontSize:11,fontWeight:600,cursor:"pointer",whiteSpace:"nowrap",transition:"all 0.15s"}}>{d}</button></span>);})}</div>
       </div>
       <div style={{background:BRAND.white,borderBottom:`1px solid ${BRAND.gray}`,padding:"8px 20px",display:"flex",alignItems:"center",gap:10,flexShrink:0}}>
         <div style={{position:"relative",flex:1,maxWidth:360}}><span style={{position:"absolute",left:11,top:"50%",transform:"translateY(-50%)",color:BRAND.textMuted,fontSize:14}}>🔍</span><input value={searchTerm} onChange={e=>setSearchTerm(e.target.value)} placeholder="Search name, title, or department…" style={{width:"100%",padding:"7px 30px 7px 34px",border:`1px solid ${BRAND.gray}`,borderRadius:8,fontSize:12,outline:"none",color:BRAND.navy,background:BRAND.canvas,boxSizing:"border-box"}}/>{searchTerm&&<button onClick={()=>setSearchTerm("")} style={{position:"absolute",right:8,top:"50%",transform:"translateY(-50%)",background:"none",border:"none",cursor:"pointer",color:BRAND.textMuted,fontSize:13}}>✕</button>}</div>
