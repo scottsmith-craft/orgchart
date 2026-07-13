@@ -60,7 +60,7 @@ const TREE={
   31:{name:"Catie Brown",title:"Lead, User Research",dept:"Product Management",loc:"Nashville Office",tz:"CT",flags:{team:"UX",sortOverride:"lead"},children:[]},
   32:{name:"Daniel Foreman",title:"Technical Product Manager",dept:"Product Management",loc:"SLC Office",tz:"MT",flags:{team:"Product",sortOverride:"rank5"},children:[]},
   33:{name:"David Theurer",title:"Principal Software Product Manager",dept:"Product Management",loc:"SLC Office",tz:"MT",flags:{team:"Product",sortOverride:"rank2"},children:[]},
-  35:{name:"Lisa Jameson",title:"Senior Manager, Product & User Experience",dept:"Product Management",loc:"Nashville Office",tz:"CT",flags:{team:"Product",sortOverride:"rank1"},children:[29,37,38,31,132]},
+  35:{name:"Lisa Jameson",title:"Senior Manager, Product & User Experience",dept:"Product Management",loc:"Nashville Office",tz:"CT",flags:{team:"Product",sortOverride:"rank1"},children:[29,37,38,31,132,142]},
   36:{name:"Sage Robins",title:"Senior Product Operations Manager",dept:"Product Management",loc:"SLC Office",tz:"MT",flags:{team:"Product",sortOverride:"rank1"},children:[]},
   37:{name:"Samantha Uebel",title:"Lead UX Designer",dept:"Product Management",loc:"Remote",tz:"ET",flags:{team:"UX",sortOverride:"rank4"},children:[]},
   38:{name:"Tracy Gillespie",title:"Principal Software Product Manager",dept:"Product Management",loc:"Nashville Office",tz:"CT",flags:{team:"Product",sortOverride:"rank2"},children:[]},
@@ -151,6 +151,7 @@ const TREE={
   139:{name:"TBH-PT2",title:"Senior Software Engineer",dept:"Product & Technology",loc:"Nashville Office",tz:"CT",flags:{tbh:true},children:[]},
   140:{name:"Hema Chowdary Gorijala",title:"Contractor (Insight Global)",dept:"Technology",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
   141:{name:"Kavitha Kampally",title:"Contractor (Insight Global)",dept:"Technology",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
+  142:{name:"Dangerfield Moore",title:"Senior Product Manager",dept:"Product Management",loc:"Nashville Office",tz:"CT",flags:{team:"Product"},children:[]},
 };
 
 const employees=Object.entries(TREE).map(([id,node])=>({id:String(id),name:node.name,title:node.title,dept:node.dept,loc:node.loc,tz:node.tz,reports:node.children.map(String),manager:null,hired:node.flags.hired||false,startDate:node.flags.startDate||null,...node.flags}));
