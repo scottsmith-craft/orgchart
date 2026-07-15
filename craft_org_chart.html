@@ -21,7 +21,7 @@
 <script type="text/babel">
 const{useState,useRef,useCallback,useEffect}=React;
 const BRAND={navy:"#002855",blue:"#0070F0",lime:"#97E152",sky:"#46B1EF",gray:"#E3E3E3",white:"#FFFFFF",canvas:"#FFFFFF",textMuted:"#6B7A90"};
-const DEPT_COLORS={"Central Office":"#002855","Executive Leadership":"#002855","Product & Technology":"#16A34A","Product Management":"#84CC16","Technology":"#166534","Engineering":"#166534","Business Operations":"#A855F7","Craft Insights":"#1D4ED8","Customer Success":"#0D9488","Partnership Development":"#E11D48","Workforce Partnership":"#FBBF24","Instructional Innovation":"#0891B2","Instructional Innovation & Apprenticeship Design":"#0891B2","Workforce & WIOA":"#2DD4BF","Craft Consulting":"#134E4A","Marketing":"#C2612A","Solution Engineering":"#F97316","People & Talent":"#475569","Finance":"#6B9FD4","Legal":"#4A235A","WGU":"#46B1EF"};
+const DEPT_COLORS={"Central Office":"#002855","Executive Leadership":"#002855","Product & Technology":"#16A34A","Product Management":"#84CC16","Technology":"#166534","Engineering":"#166534","Business Operations":"#A855F7","Business Development":"#E11D48","Craft Insights":"#1D4ED8","Customer Success":"#0D9488","Partnership Development":"#E11D48","Workforce Partnership":"#FBBF24","Instructional Innovation":"#0891B2","Instructional Innovation & Apprenticeship Design":"#0891B2","Workforce & WIOA":"#2DD4BF","Craft Consulting":"#134E4A","Marketing":"#C2612A","Solution Engineering":"#F97316","People & Talent":"#475569","Finance":"#6B9FD4","Legal":"#4A235A","WGU":"#46B1EF"};
 const dc=d=>DEPT_COLORS[d]||BRAND.textMuted;
 
 const WGU_INFO={"Brandon Zollner":{email:"brandon.zollner@wgu.edu",role:"WGU Advancement — Philanthropic Partnerships Support"},"Myka Smith":{email:"myka.smith@wgu.edu",role:"Primary People & Talent Partner"},"Emily Evers":{email:"emily.evers@wgu.edu",role:"People & Talent — Secondary Contact"},"Mike Henochowicz":{email:"mike.henochowicz@wgu.edu",role:"Primary Legal Contact"},"Emelie Klott":{email:"emelie.klott@wgu.edu",role:"Legal — Secondary Contact"},"Hoa Bui":{email:"hoa.bui1@wgu.edu",role:"Primary Finance Contact (covering for Justin Larsen)"},"Todd Sutton":{email:"todd.sutton@wgu.edu",role:"Primary Strategic Communications Contact"},"Ryan Stone":{email:"ryan.stone@wgu.edu",role:"Primary Procurement Contact"},"Terrance Hopson":{email:"terrance.hopson@wgu.edu",role:"WGU Regions Liaison"},"Lauren Brady":{email:"lauren.brady1@wgu.edu",role:"Primary Event / Accommodation Procurement Contact"},"Tom Elegante":{email:"tom.elegante@wgu.edu",role:"Security — Director, Security Operations"}};
@@ -48,7 +48,7 @@ const TREE={
   18:{name:"Patty Moore",title:"Head of Product & Technology",dept:"Product & Technology",loc:"SLC Office",tz:"MT",flags:{team:"Product & Technology",sortOverride:"rank1"},children:[50,128,52,51,130,15]},
   19:{name:"Melinda Perez",title:"Senior Manager, Business Operations",dept:"Business Operations",loc:"Remote",tz:"ET",flags:{team:"Biz Ops",sortOverride:"rank4"},children:[66,67,137]},
   20:{name:"Patricia Saenz-Armstrong",title:"Senior Manager, Data and Research Initiatives",dept:"Craft Insights",loc:"Remote",tz:"ET",flags:{team:"Craft Insights",sortOverride:"rank5"},children:[68,69,70,71,73]},
-  21:{name:"John Suk",title:"Director, Business Development",dept:"Partnership Development",loc:"Nashville Office",tz:"CT",flags:{sortOverride:"rank2"},children:[89,90,91,92]},
+  21:{name:"John Suk",title:"Director, Business Development",dept:"Business Development",loc:"Nashville Office",tz:"CT",flags:{sortOverride:"rank2"},children:[89,90,91,92]},
   22:{name:"Allee Bell",title:"Director, Customer Success & Strategic Implementation",dept:"Customer Success",loc:"Nashville Office",tz:"CT",flags:{team:"Customer Success",sortOverride:"rank3"},children:[74,75,76,77]},
   50:{name:"Amani Ariel-Wamala",title:"Director, Technical Product Management",dept:"Product Management",loc:"Remote",tz:"ET",flags:{team:"Product",},children:[30,32,33,35,36]},
   51:{name:"Kristin Eller",title:"Project Manager, Grants",dept:"Product & Technology",loc:"Nashville Office",tz:"CT",flags:{team:"Grants",},children:[]},
@@ -87,12 +87,11 @@ const TREE={
   74:{name:"Kimberly Eckert",title:"Senior Manager, Instructional Innovation & Apprenticeship Design",dept:"Instructional Innovation",loc:"Remote",tz:"CT",flags:{team:"Instructional Innovation",sortOverride:"rank2"},children:[98,99,100,101]},
   75:{name:"Melanie Flowers",title:"Senior Manager, Workforce and WIOA",dept:"Workforce & WIOA",loc:"Remote",tz:"CT",flags:{team:"Workforce",sortOverride:"rank3"},children:[102,103]},
   76:{name:"Victoria Lawrence",title:"Senior Manager, Customer Success",dept:"Customer Success",loc:"Remote",tz:"ET",flags:{team:"Customer Success",sortOverride:"rank1"},children:[93,94,95,96,97]},
-  77:{name:"Craft Consulting Team",title:"",dept:"Craft Consulting",loc:"",tz:"",flags:{group:true,sortOverride:"rank5"},children:[82,84,85,86,78,80,81]},
+  77:{name:"Craft Consulting Team",title:"",dept:"Craft Consulting",loc:"",tz:"",flags:{group:true,sortOverride:"rank5"},children:[84,85,86,78,80,81]},
   78:{name:"Amy Lesniak",title:"Contractor",dept:"Craft Consulting",loc:"Remote",tz:"CT",flags:{team:"Engineering",contractor:true},children:[]},
   79:{name:"Curtis McGhee",title:"Contractor (Grey Solutions)",dept:"Craft Consulting",loc:"Remote",tz:"ET",flags:{contractor:true},children:[]},
   80:{name:"Erica Love",title:"Contractor",dept:"Craft Consulting",loc:"Remote",tz:"CT",flags:{contractor:true},children:[88,79,83]},
   81:{name:"Erin Silver",title:"Contractor (Envision Strategy Group)",dept:"Craft Consulting",loc:"Remote",tz:"MT",flags:{contractor:true},children:[]},
-  82:{name:"Joyce Milling",title:"Apprenticeship Program Development Advisor",dept:"Craft Consulting",loc:"Remote",tz:"ET",flags:{team:"Craft Consulting",},children:[]},
   83:{name:"M. Brian Peake",title:"Contractor (Grey Solutions)",dept:"Craft Consulting",loc:"Remote",tz:"CT",flags:{contractor:true},children:[]},
   84:{name:"Mamie Williams",title:"Nursing Pathway Development Advisor",dept:"Craft Consulting",loc:"Nashville Office",tz:"CT",flags:{team:"Craft Consulting",},children:[]},
   85:{name:"Michelle Jewett",title:"Apprenticeship Program Development Advisor",dept:"Craft Consulting",loc:"Remote",tz:"MT",flags:{team:"Craft Consulting",},children:[]},
@@ -102,7 +101,7 @@ const TREE={
   90:{name:"Jenn Mathis",title:"Senior Manager, Technical Partnerships",dept:"Partnership Development",loc:"Remote",tz:"ET",flags:{team:"Partnership Development",sortOverride:"top"},children:[105,106]},
   91:{name:"Karen Riddell",title:"Senior Technical Sales Engineer",dept:"Solution Engineering",loc:"Nashville Office",tz:"CT",flags:{team:"Partnership Development",sortOverride:"rank3"},children:[]},
   92:{name:"Scott Smith",title:"Senior Manager, Technical Marketing",dept:"Marketing",loc:"Remote",tz:"ET",flags:{team:"Marketing",sortOverride:"rank1"},children:[113,114,127]},
-  93:{name:"Chloe Sun",title:"Lead Customer Success Coordinator",dept:"Customer Success",loc:"Remote",tz:"ET",flags:{team:"Customer Success",},children:[]},
+  93:{name:"Chloe Sun",title:"Customer Onboarding & Implementation Manager",dept:"Customer Success",loc:"Remote",tz:"ET",flags:{team:"Customer Success",},children:[]},
   94:{name:"Gigi Arnone",title:"Customer Operations Analyst",dept:"Customer Success",loc:"Remote",tz:"MT",flags:{team:"Customer Success",},children:[]},
   95:{name:"Jacob Clark",title:"Senior Customer Success Manager",dept:"Customer Success",loc:"Remote",tz:"ET",flags:{team:"Customer Success",},children:[]},
   96:{name:"TBH-CS1",title:"Customer Onboarding & Implementation Manager",dept:"Customer Success",loc:"Nashville Office",tz:"CT",flags:{team:"Customer Success",tbh:true},children:[]},
@@ -260,7 +259,7 @@ function TeamsView({onSelect}){
 
   const seniorLeaders=[byId["18"],byId["21"],byId["22"],byId["19"],byId["20"]].filter(Boolean);
 
-  const deptOrder=["Central Office","Business Operations","Craft Consulting","Craft Insights","Customer Success","Instructional Innovation","Marketing","Partnership Development","Product & Technology","Product Management","Solution Engineering","Engineering","Workforce & WIOA","Workforce Partnership"];
+  const deptOrder=["Central Office","Business Operations","Craft Consulting","Craft Insights","Customer Success","Engineering","Instructional Innovation","Marketing","Partnership Development","Product & Technology","Product Management","Solution Engineering","Workforce & WIOA","Workforce Partnership"];
 
   // Get all depts in a leader's subtree
   function getSubtreeDepts(empId,visited=new Set()){
@@ -337,7 +336,13 @@ function TeamsView({onSelect}){
   return(
     <div style={{height:"100%",overflowY:"auto"}}>
       <div style={{padding:"28px 32px 80px",maxWidth:900,margin:"0 auto"}}>
-        <p style={{fontSize:12,color:BRAND.textMuted,marginBottom:24,lineHeight:1.5}}>Each leader's domains at a glance. Click any team chip to expand it.</p>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:20}}>
+          <p style={{fontSize:12,color:BRAND.textMuted,lineHeight:1.5,margin:0}}>Each leader's domains at a glance. Click any team chip to expand it.</p>
+          <div style={{display:"flex",gap:6,flexShrink:0}}>
+            <button onClick={()=>{const allKeys=[];seniorLeaders.forEach(l=>{const depts=[...getSubtreeDepts(l.id)].filter(d=>deptOrder.includes(d));depts.forEach(d=>allKeys.push(l.id+":"+d));});setExpandedDepts(new Set(allKeys));}} style={{fontSize:11,color:BRAND.blue,background:"none",border:`1px solid ${BRAND.blue}`,borderRadius:6,padding:"5px 11px",cursor:"pointer",fontWeight:600}}>Expand All</button>
+            <button onClick={()=>setExpandedDepts(new Set())} style={{fontSize:11,color:BRAND.textMuted,background:"none",border:`1px solid ${BRAND.gray}`,borderRadius:6,padding:"5px 11px",cursor:"pointer",fontWeight:600}}>Collapse All</button>
+          </div>
+        </div>
         {seniorLeaders.map(leader=>{
           const color=dc(leader.dept);
           const subtreeDepts=[...getSubtreeDepts(leader.id)].filter(d=>deptOrder.includes(d));
@@ -347,12 +352,15 @@ function TeamsView({onSelect}){
             <div key={leader.id} style={{marginBottom:28,background:BRAND.white,border:`1.5px solid ${BRAND.gray}`,borderLeft:`5px solid ${color}`,borderRadius:12,overflow:"hidden",boxShadow:"0 2px 8px rgba(0,40,85,0.06)"}}>
               {/* Leader header */}
               <div onClick={()=>onSelect(leader)} style={{display:"flex",alignItems:"center",gap:12,padding:"14px 18px",cursor:"pointer",background:`color-mix(in srgb, ${color} 6%, white)`}} onMouseEnter={e=>e.currentTarget.style.background=`color-mix(in srgb, ${color} 10%, white)`} onMouseLeave={e=>e.currentTarget.style.background=`color-mix(in srgb, ${color} 6%, white)`}>
-                <Avatar emp={leader} size={40}/>
-                <div style={{flex:1}}>
-                  <div style={{fontWeight:800,fontSize:14,color:BRAND.navy}}>{leader.name}</div>
-                  <div style={{fontSize:11.5,color:BRAND.textMuted,marginTop:2}}>{leader.title}</div>
+                <div style={{width:44,height:44,borderRadius:10,background:color,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}><span style={{fontSize:20,color:"#fff",fontWeight:800}}>{leader.dept==="Product & Technology"?"P&T":leader.dept==="Partnership Development"?"PD":leader.dept.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase()}</span></div>
+                <div style={{flex:1,minWidth:0}}>
+                  <div style={{fontWeight:800,fontSize:15,color:BRAND.navy,letterSpacing:"-0.01em"}}>{leader.dept}</div>
+                  <div style={{fontSize:11,color:BRAND.textMuted,marginTop:3,display:"flex",alignItems:"center",gap:6}}>
+                    <Avatar emp={leader} size={16}/>
+                    <span>{leader.name} · {leader.title}</span>
+                  </div>
                 </div>
-                <div style={{fontSize:10,color:BRAND.textMuted,background:BRAND.white,border:`1px solid ${BRAND.gray}`,borderRadius:6,padding:"3px 8px"}}>{sortedOwned.length} {sortedOwned.length===1?"team":"teams"}</div>
+                <div style={{fontSize:10,color:BRAND.textMuted,background:BRAND.white,border:`1px solid ${BRAND.gray}`,borderRadius:6,padding:"3px 8px",flexShrink:0}}>{sortedOwned.length} {sortedOwned.length===1?"team":"teams"}</div>
               </div>
 
               {/* Team chips + expanded content */}
@@ -467,11 +475,21 @@ function App(){
   return(
     <div style={{height:"100vh",display:"flex",flexDirection:"column",fontFamily:"-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif",background:BRAND.canvas,overflow:"hidden"}}>
       <div style={{background:BRAND.navy,padding:"10px 20px",flexShrink:0,borderBottom:"1px solid #00396e"}}>
-        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10}}>
+        <div style={{display:"flex",alignItems:"center",marginBottom:10}}>
           <div style={{display:"flex",alignItems:"center",gap:10}}><Logo/><div><div style={{color:BRAND.white,fontWeight:800,fontSize:15,letterSpacing:"-0.02em",lineHeight:1}}>Craft</div><div style={{color:"#4a7aaa",fontSize:11,marginTop:1}}>Org Chart 2026</div></div></div>
-          <div style={{display:"flex",background:"rgba(255,255,255,0.08)",borderRadius:8,padding:3}}>{[["tree","⬡ Tree"],["teams","⊞ Teams"],["list","☰ List"]].map(([v,lbl])=>(<button key={v} onClick={()=>setView(v)} style={{padding:"4px 13px",borderRadius:6,border:"none",background:view===v?BRAND.blue:"transparent",color:view===v?BRAND.white:"rgba(255,255,255,0.6)",fontSize:11,fontWeight:600,cursor:"pointer",transition:"all 0.15s"}}>{lbl}</button>))}</div>
         </div>
         <div style={{display:"flex",flexWrap:"wrap",gap:5}}>{usedDepts.map(d=>{const active=activeDept===d&&!activeTeam&&!peopleLeaders;const c=d==="All"?BRAND.blue:d==="WGU"?BRAND.sky:d==="Contractors"?"#6B7A90":d==="Open Roles"?BRAND.lime:dc(d);return(<span key={d} style={{display:"flex",alignItems:"center",gap:5}}>{d==="WGU"&&<span style={{width:1,height:18,background:"rgba(255,255,255,0.2)",display:"inline-block",marginRight:2}}/>}<button onClick={()=>{setActiveDept(d);setActiveTeam(null);setPeopleLeaders(false);}} style={{padding:"4px 12px",borderRadius:20,border:active?`1.5px solid ${c}`:"1.5px solid transparent",background:active?c:"rgba(255,255,255,0.08)",color:active?BRAND.white:"rgba(255,255,255,0.6)",fontSize:11,fontWeight:600,cursor:"pointer",whiteSpace:"nowrap",transition:"all 0.15s"}}>{d}</button>{d==="Contractors"&&<button onClick={()=>{setPeopleLeaders(p=>!p);setActiveTeam(null);setActiveDept("All");}} style={{padding:"4px 12px",borderRadius:20,border:peopleLeaders?"1.5px solid #97E152":"1.5px solid transparent",background:peopleLeaders?"#97E152":"rgba(255,255,255,0.08)",color:peopleLeaders?"#1a3300":"rgba(255,255,255,0.6)",fontSize:11,fontWeight:600,cursor:"pointer",whiteSpace:"nowrap",transition:"all 0.15s"}}>People Leaders</button>}</span>);})}</div>
+      </div>
+      {/* Full-width tab bar */}
+      <div style={{background:BRAND.white,borderBottom:`2px solid ${BRAND.gray}`,display:"flex",flexShrink:0}}>
+        {[["tree","⬡","Tree","Reporting hierarchy"],["teams","⊞","Teams","Departments at a glance"],["list","☰","List","Everyone alphabetically"]].map(([v,icon,label,sub])=>{
+          const active=view===v;
+          return(<button key={v} onClick={()=>setView(v)} style={{flex:1,padding:"10px 0 8px",border:"none",borderBottom:active?`3px solid ${BRAND.blue}`:"3px solid transparent",background:"transparent",cursor:"pointer",transition:"all 0.15s",display:"flex",flexDirection:"column",alignItems:"center",gap:2,marginBottom:-2}}>
+            <span style={{fontSize:16,lineHeight:1,filter:active?"none":"grayscale(1) opacity(0.5)"}}>{icon}</span>
+            <span style={{fontSize:12,fontWeight:700,color:active?BRAND.blue:BRAND.textMuted,lineHeight:1}}>{label}</span>
+            <span style={{fontSize:9.5,color:active?BRAND.blue:BRAND.textMuted,opacity:active?0.8:0.5,lineHeight:1}}>{sub}</span>
+          </button>);
+        })}
       </div>
       <div style={{background:"#F0F4F8",borderBottom:`1px solid ${BRAND.gray}`,padding:"8px 20px",display:"flex",alignItems:"center",gap:10,flexShrink:0}}>
         <div style={{position:"relative",flex:1,maxWidth:360}}><span style={{position:"absolute",left:11,top:"50%",transform:"translateY(-50%)",color:BRAND.textMuted,fontSize:14}}>🔍</span><input value={searchTerm} onChange={e=>setSearchTerm(e.target.value)} placeholder="Search name, title, or department…" style={{width:"100%",padding:"7px 30px 7px 34px",border:`1px solid ${BRAND.gray}`,borderRadius:8,fontSize:12,outline:"none",color:BRAND.navy,background:BRAND.white,boxSizing:"border-box"}}/>{searchTerm&&<button onClick={()=>setSearchTerm("")} style={{position:"absolute",right:8,top:"50%",transform:"translateY(-50%)",background:"none",border:"none",cursor:"pointer",color:BRAND.textMuted,fontSize:13}}>✕</button>}</div>
