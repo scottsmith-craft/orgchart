@@ -21,7 +21,7 @@
 <script type="text/babel">
 const{useState,useRef,useCallback,useEffect}=React;
 const BRAND={navy:"#002855",blue:"#0070F0",lime:"#97E152",sky:"#46B1EF",gray:"#E3E3E3",white:"#FFFFFF",canvas:"#FFFFFF",textMuted:"#6B7A90"};
-const DEPT_COLORS={"Central Office":"#002855","Executive Leadership":"#002855","Product & Technology":"#16A34A","Product Management":"#84CC16","Technology":"#166534","Business Operations":"#A855F7","Craft Insights":"#1D4ED8","Customer Success":"#0D9488","Partnership Development":"#E11D48","Workforce Partnership":"#FBBF24","Instructional Innovation":"#0891B2","Instructional Innovation & Apprenticeship Design":"#0891B2","Workforce & WIOA":"#2DD4BF","Craft Consulting":"#134E4A","Marketing":"#C2612A","Solution Engineering":"#F97316","People & Talent":"#475569","Finance":"#6B9FD4","Legal":"#4A235A","WGU":"#46B1EF"};
+const DEPT_COLORS={"Central Office":"#002855","Executive Leadership":"#002855","Product & Technology":"#16A34A","Product Management":"#84CC16","Technology":"#166534","Engineering":"#166534","Business Operations":"#A855F7","Craft Insights":"#1D4ED8","Customer Success":"#0D9488","Partnership Development":"#E11D48","Workforce Partnership":"#FBBF24","Instructional Innovation":"#0891B2","Instructional Innovation & Apprenticeship Design":"#0891B2","Workforce & WIOA":"#2DD4BF","Craft Consulting":"#134E4A","Marketing":"#C2612A","Solution Engineering":"#F97316","People & Talent":"#475569","Finance":"#6B9FD4","Legal":"#4A235A","WGU":"#46B1EF"};
 const dc=d=>DEPT_COLORS[d]||BRAND.textMuted;
 
 const WGU_INFO={"Brandon Zollner":{email:"brandon.zollner@wgu.edu",role:"WGU Advancement — Philanthropic Partnerships Support"},"Myka Smith":{email:"myka.smith@wgu.edu",role:"Primary People & Talent Partner"},"Emily Evers":{email:"emily.evers@wgu.edu",role:"People & Talent — Secondary Contact"},"Mike Henochowicz":{email:"mike.henochowicz@wgu.edu",role:"Primary Legal Contact"},"Emelie Klott":{email:"emelie.klott@wgu.edu",role:"Legal — Secondary Contact"},"Hoa Bui":{email:"hoa.bui1@wgu.edu",role:"Primary Finance Contact (covering for Justin Larsen)"},"Todd Sutton":{email:"todd.sutton@wgu.edu",role:"Primary Strategic Communications Contact"},"Ryan Stone":{email:"ryan.stone@wgu.edu",role:"Primary Procurement Contact"},"Lauren Brady":{email:"lauren.brady1@wgu.edu",role:"Primary Event / Accommodation Procurement Contact"},"Tom Elegante":{email:"tom.elegante@wgu.edu",role:"Security — Director, Security Operations"}};
@@ -45,9 +45,7 @@ const TREE={
   14:{name:"Heather Webb",title:"Contractor",dept:"Central Office",loc:"Remote",tz:"MT",flags:{contractor:true},children:[]},
   15:{name:"Hugh Molotsi",title:"Contractor",dept:"Product & Technology",loc:"Remote",tz:"MT",flags:{contractor:true},children:[]},
   17:{name:"Tamika Graham",title:"Contractor",dept:"Central Office",loc:"Remote",tz:"GMT",flags:{contractor:true},children:[]},
-  18:{name:"Patty Moore",title:"Head of Product & Technology",dept:"Product & Technology",loc:"SLC Office",tz:"MT",flags:{team:"Product & Technology",sortOverride:"rank1"},children:[201,202,52,51,130,15]},
-  201:{name:"Product",title:"",dept:"Product Management",loc:"",tz:"",flags:{group:true},children:[50]},
-  202:{name:"Technology",title:"",dept:"Technology",loc:"",tz:"",flags:{group:true},children:[128,138,139]},
+  18:{name:"Patty Moore",title:"Head of Product & Technology",dept:"Product & Technology",loc:"SLC Office",tz:"MT",flags:{team:"Product & Technology",sortOverride:"rank1"},children:[50,128,52,51,130,15]},
   19:{name:"Melinda Perez",title:"Senior Manager, Business Operations",dept:"Business Operations",loc:"Remote",tz:"ET",flags:{team:"Biz Ops",sortOverride:"rank4"},children:[66,67,137]},
   20:{name:"Patricia Saenz-Armstrong",title:"Senior Manager, Data and Research Initiatives",dept:"Craft Insights",loc:"Remote",tz:"ET",flags:{team:"Craft Insights",sortOverride:"rank5"},children:[68,69,70,71,73]},
   21:{name:"John Suk",title:"Director, Business Development",dept:"Partnership Development",loc:"Nashville Office",tz:"CT",flags:{sortOverride:"rank2"},children:[89,90,91,92]},
@@ -64,21 +62,21 @@ const TREE={
   36:{name:"Sage Robins",title:"Senior Product Operations Manager",dept:"Product Management",loc:"SLC Office",tz:"MT",flags:{team:"Product",sortOverride:"rank1"},children:[]},
   37:{name:"Samantha Uebel",title:"Lead UX Designer",dept:"Product Management",loc:"Remote",tz:"ET",flags:{team:"UX",sortOverride:"rank4"},children:[]},
   38:{name:"Tracy Gillespie",title:"Principal Software Product Manager",dept:"Product Management",loc:"Nashville Office",tz:"CT",flags:{team:"Product",sortOverride:"rank2"},children:[]},
-  42:{name:"Andrew Johnson",title:"Staff Cloud Engineer",dept:"Technology",loc:"Remote",tz:"CT",flags:{team:"Engineering",},children:[]},
-  44:{name:"Alex Paulson",title:"Senior Software Engineer",dept:"Technology",loc:"Nashville Office",tz:"CT",flags:{team:"Engineering",},children:[]},
-  45:{name:"Alex Thornbury",title:"Staff Software Engineer",dept:"Technology",loc:"Remote",tz:"ET",flags:{team:"Engineering",},children:[]},
-  46:{name:"Alyssa Jackson",title:"Senior Software Engineer",dept:"Technology",loc:"Remote",tz:"ET",flags:{team:"Engineering",},children:[]},
-  47:{name:"Andrew Townsend",title:"Senior Software Engineer",dept:"Technology",loc:"Remote",tz:"",flags:{team:"Engineering",},children:[]},
-  48:{name:"Brendan Ortmann",title:"Software Engineer II",dept:"Technology",loc:"Nashville Office",tz:"CT",flags:{team:"Engineering",},children:[]},
-  49:{name:"Daniel Lopez",title:"Data Engineer",dept:"Technology",loc:"SLC Office",tz:"MT",flags:{team:"Engineering",},children:[]},
-  56:{name:"Jonathan Frankel",title:"Senior Software Engineer",dept:"Technology",loc:"Nashville Office",tz:"CT",flags:{team:"Engineering",},children:[]},
-  57:{name:"Michael Buhler",title:"Senior Software Engineer",dept:"Technology",loc:"Nashville Office",tz:"CT",flags:{team:"Engineering",},children:[]},
-  58:{name:"Michael Endsley",title:"Staff Software Engineer",dept:"Technology",loc:"SLC Office",tz:"MT",flags:{team:"Engineering",},children:[]},
-  59:{name:"Michael Herman",title:"Data Engineer",dept:"Technology",loc:"SLC Office",tz:"MT",flags:{team:"Engineering",},children:[]},
-  60:{name:"Nick Florin",title:"Senior Software Engineer",dept:"Technology",loc:"Remote",tz:"ET",flags:{team:"Engineering",},children:[]},
-  61:{name:"Sam Schneller",title:"Software Engineer II",dept:"Technology",loc:"Remote",tz:"ET",flags:{team:"Engineering",},children:[]},
-  62:{name:"Michael Arnold",title:"Staff Data Engineer",dept:"Technology",loc:"Nashville Office",tz:"CT",flags:{team:"Engineering"},children:[]},
-  64:{name:"Brian Schultek",title:"Contractor (Base Two) — Principal Software Engineer",dept:"Technology",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
+  42:{name:"Andrew Johnson",title:"Staff Cloud Engineer",dept:"Engineering",loc:"Remote",tz:"CT",flags:{team:"Engineering",},children:[]},
+  44:{name:"Alex Paulson",title:"Senior Software Engineer",dept:"Engineering",loc:"Nashville Office",tz:"CT",flags:{team:"Engineering",},children:[]},
+  45:{name:"Alex Thornbury",title:"Staff Software Engineer",dept:"Engineering",loc:"Remote",tz:"ET",flags:{team:"Engineering",},children:[]},
+  46:{name:"Alyssa Jackson",title:"Senior Software Engineer",dept:"Engineering",loc:"Remote",tz:"ET",flags:{team:"Engineering",},children:[]},
+  47:{name:"Andrew Townsend",title:"Senior Software Engineer",dept:"Engineering",loc:"Remote",tz:"",flags:{team:"Engineering",},children:[]},
+  48:{name:"Brendan Ortmann",title:"Software Engineer II",dept:"Engineering",loc:"Nashville Office",tz:"CT",flags:{team:"Engineering",},children:[]},
+  49:{name:"Daniel Lopez",title:"Data Engineer",dept:"Engineering",loc:"SLC Office",tz:"MT",flags:{team:"Engineering",},children:[]},
+  56:{name:"Jonathan Frankel",title:"Senior Software Engineer",dept:"Engineering",loc:"Nashville Office",tz:"CT",flags:{team:"Engineering",},children:[]},
+  57:{name:"Michael Buhler",title:"Senior Software Engineer",dept:"Engineering",loc:"Nashville Office",tz:"CT",flags:{team:"Engineering",},children:[]},
+  58:{name:"Michael Endsley",title:"Staff Software Engineer",dept:"Engineering",loc:"SLC Office",tz:"MT",flags:{team:"Engineering",},children:[]},
+  59:{name:"Michael Herman",title:"Data Engineer",dept:"Engineering",loc:"SLC Office",tz:"MT",flags:{team:"Engineering",},children:[]},
+  60:{name:"Nick Florin",title:"Senior Software Engineer",dept:"Engineering",loc:"Remote",tz:"ET",flags:{team:"Engineering",},children:[]},
+  61:{name:"Sam Schneller",title:"Software Engineer II",dept:"Engineering",loc:"Remote",tz:"ET",flags:{team:"Engineering",},children:[]},
+  62:{name:"Michael Arnold",title:"Staff Data Engineer",dept:"Engineering",loc:"Nashville Office",tz:"CT",flags:{team:"Engineering"},children:[]},
+  64:{name:"Brian Schultek",title:"Contractor (Base Two) — Principal Software Engineer",dept:"Engineering",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
   66:{name:"Katelyn Kleinpeter",title:"Business Operations Lead",dept:"Business Operations",loc:"Remote",tz:"CT",flags:{team:"Biz Ops",},children:[]},
   67:{name:"Reina Beach",title:"Business Operations Manager",dept:"Business Operations",loc:"Nashville Office",tz:"CT",flags:{team:"Biz Ops",},children:[]},
   68:{name:"Jorge Ugaz",title:"Senior Research Scientist",dept:"Craft Insights",loc:"Remote",tz:"ET",flags:{team:"Craft Insights",},children:[]},
@@ -125,31 +123,31 @@ const TREE={
   112:{name:"Sarah Schade",title:"Contractor",dept:"Workforce Partnership",loc:"Remote",tz:"CT",flags:{contractor:true},children:[]},
   113:{name:"Manoj Kumar Reddy Kondreddygari",title:"Marketing Associate",dept:"Marketing",loc:"Nashville Office",tz:"CT",flags:{team:"Marketing",},children:[]},
   114:{name:"Samantha Lenger",title:"Contractor (Saturday Media)",dept:"Marketing",loc:"Remote",tz:"ET",flags:{contractor:true},children:[]},
-  115:{name:"Edison Zuluaga",title:"Contractor (Try Catch)",dept:"Technology",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
-  116:{name:"James Gutierrez",title:"Contractor (Try Catch)",dept:"Technology",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
-  117:{name:"Juan Zuluaga",title:"Contractor (Try Catch)",dept:"Technology",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
-  119:{name:"Vishnu Boppa",title:"Contractor (Insight Global)",dept:"Technology",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
-  121:{name:"Stefany De Sousa",title:"Contractor (Try Catch)",dept:"Technology",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
-  122:{name:"Kate Hansen",title:"Contractor (Base Two) — Software Engineer",dept:"Technology",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
-  123:{name:"Zach Chay-Dolan",title:"Contractor (Base Two) — Senior Software Engineer",dept:"Technology",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
-  124:{name:"Drew Miller",title:"Contractor (Base Two) — Principal Software Engineer",dept:"Technology",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
-  125:{name:"Gustavo Evangelista",title:"Contractor (Insight Global)",dept:"Technology",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
-  126:{name:"Karun Reddy Katepally",title:"Contractor (Insight Global)",dept:"Technology",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
+  115:{name:"Edison Zuluaga",title:"Contractor (Try Catch)",dept:"Engineering",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
+  116:{name:"James Gutierrez",title:"Contractor (Try Catch)",dept:"Engineering",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
+  117:{name:"Juan Zuluaga",title:"Contractor (Try Catch)",dept:"Engineering",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
+  119:{name:"Vishnu Boppa",title:"Contractor (Insight Global)",dept:"Engineering",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
+  121:{name:"Stefany De Sousa",title:"Contractor (Try Catch)",dept:"Engineering",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
+  122:{name:"Kate Hansen",title:"Contractor (Base Two) — Software Engineer",dept:"Engineering",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
+  123:{name:"Zach Chay-Dolan",title:"Contractor (Base Two) — Senior Software Engineer",dept:"Engineering",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
+  124:{name:"Drew Miller",title:"Contractor (Base Two) — Principal Software Engineer",dept:"Engineering",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
+  125:{name:"Gustavo Evangelista",title:"Contractor (Insight Global)",dept:"Engineering",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
+  126:{name:"Karun Reddy Katepally",title:"Contractor (Insight Global)",dept:"Engineering",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
   127:{name:"Portia Pratt",title:"Contractor (NGA)",dept:"Marketing",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
-  128:{name:"Eric McGee",title:"Senior Manager, Technology",dept:"Technology",loc:"Nashville Office",tz:"CT",flags:{team:"Engineering",sortOverride:"rank2"},children:[42,44,45,46,47,48,49,56,57,58,59,60,61,62,64,115,116,117,119,121,122,123,124,125,126,129,133,134,140,141]},
-  129:{name:"Jay Johnston",title:"Senior Software Engineer",dept:"Technology",loc:"Nashville Office",tz:"CT",flags:{team:"Engineering",},children:[]},
+  128:{name:"Eric McGee",title:"Senior Manager, Technology",dept:"Engineering",loc:"Nashville Office",tz:"CT",flags:{team:"Engineering",sortOverride:"rank2"},children:[42,44,45,46,47,48,49,56,57,58,59,60,61,62,64,115,116,117,119,121,122,123,124,125,126,129,133,134,140,141,138,139]},
+  129:{name:"Jay Johnston",title:"Senior Software Engineer",dept:"Engineering",loc:"Nashville Office",tz:"CT",flags:{team:"Engineering",},children:[]},
   130:{name:"Alex Kaplan",title:"Contractor (Kalex Consulting LLC)",dept:"Product & Technology",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
   131:{name:"McAllister & Quinn",title:"Contractor",dept:"Central Office",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
   132:{name:"Virginia Balint",title:"Contractor",dept:"Product Management",loc:"Nashville Office",tz:"CT",flags:{contractor:true},children:[]},
-  133:{name:"Juan Cardona",title:"Contractor (Try Catch)",dept:"Technology",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
-  134:{name:"Andres Arbelaez",title:"Contractor (Try Catch)",dept:"Technology",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
+  133:{name:"Juan Cardona",title:"Contractor (Try Catch)",dept:"Engineering",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
+  134:{name:"Andres Arbelaez",title:"Contractor (Try Catch)",dept:"Engineering",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
   135:{name:"Jen Pitzer",title:"Staff IT Security Analyst",dept:"WGU",loc:"Phoenix Office",tz:"MT",flags:{wgu:true},children:[]},
   136:{name:"Tom Elegante",title:"Director, Security Operations",dept:"WGU",loc:"SLC Office",tz:"MT",flags:{wgu:true},children:[]},
   137:{name:"TBH-BizOps1",title:"Associate Business Systems Analyst",dept:"Business Operations",loc:"Nashville Office",tz:"CT",flags:{tbh:true},children:[]},
-  138:{name:"TBH-PT1",title:"Manager, Software Engineering & Technology",dept:"Product & Technology",loc:"Nashville Office",tz:"CT",flags:{tbh:true,sortOverride:"rank3"},children:[]},
-  139:{name:"TBH-PT2",title:"Senior Software Engineer",dept:"Product & Technology",loc:"Nashville Office",tz:"CT",flags:{tbh:true,sortOverride:"rank4"},children:[]},
-  140:{name:"Hema Chowdary Gorijala",title:"Contractor (Insight Global)",dept:"Technology",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
-  141:{name:"Kavitha Kampally",title:"Contractor (Insight Global)",dept:"Technology",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
+  138:{name:"TBH-PT1",title:"Manager, Software Engineering & Technology",dept:"Engineering",loc:"Nashville Office",tz:"CT",flags:{tbh:true},children:[]},
+  139:{name:"TBH-PT2",title:"Senior Software Engineer",dept:"Engineering",loc:"Nashville Office",tz:"CT",flags:{tbh:true},children:[]},
+  140:{name:"Hema Chowdary Gorijala",title:"Contractor (Insight Global)",dept:"Engineering",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
+  141:{name:"Kavitha Kampally",title:"Contractor (Insight Global)",dept:"Engineering",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
   142:{name:"Dangerfield Moore",title:"Senior Product Manager",dept:"Product Management",loc:"Nashville Office",tz:"CT",flags:{team:"Product"},children:[]},
   143:{name:"Terrance Hopson",title:"Regional Vice President Regional Operations — Midwest",dept:"WGU",loc:"Remote",tz:"CT",flags:{wgu:true},children:[]},
   144:{name:"Lauren Brady",title:"Procurement Sourcing Specialist",dept:"WGU",loc:"SLC Office",tz:"MT",flags:{wgu:true},children:[]},
@@ -164,7 +162,7 @@ const wguMembers=[2,3,4,5,6,7,8,9,144,135,136,143].map(id=>byId[String(id)]);
 const craftRoot=byId["1"];
 const craftEmps=employees.filter(e=>!e.wgu);
 const HIDDEN_DEPTS=new Set(["Business Development","Grant Administration","Executive Leadership","WGU"]);
-const usedDepts=["All","Central Office","Business Operations","Craft Consulting","Craft Insights","Customer Success","Instructional Innovation","Marketing","Partnership Development","Product & Technology","Product Management","Solution Engineering","Technology","Workforce & WIOA","Workforce Partnership","WGU","Contractors","Open Roles"];
+const usedDepts=["All","Central Office","Business Operations","Craft Consulting","Craft Insights","Customer Success","Engineering","Instructional Innovation","Marketing","Partnership Development","Product & Technology","Product Management","Solution Engineering","Workforce & WIOA","Workforce Partnership","WGU","Contractors","Open Roles"];
 
 function Logo(){return(<div style={{width:36,height:36,background:"#fff",borderRadius:8,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}><svg viewBox="0 0 120 110" width="34" height="34" xmlns="http://www.w3.org/2000/svg"><line x1="60" y1="36" x2="60" y2="22" stroke="#C8D5E0" strokeWidth="3.5"/><line x1="60" y1="72" x2="60" y2="86" stroke="#C8D5E0" strokeWidth="3.5"/><line x1="36" y1="54" x2="22" y2="54" stroke="#C8D5E0" strokeWidth="3.5"/><line x1="84" y1="54" x2="98" y2="54" stroke="#C8D5E0" strokeWidth="3.5"/><line x1="80" y1="36" x2="92" y2="18" stroke="#C8D5E0" strokeWidth="3"/><line x1="40" y1="72" x2="28" y2="88" stroke="#C8D5E0" strokeWidth="3"/><rect x="36" y="36" width="48" height="36" rx="9" fill="#002855"/><rect x="42" y="2" width="36" height="22" rx="7" fill="#46B1EF"/><rect x="42" y="86" width="36" height="22" rx="7" fill="#46B1EF"/><rect x="0" y="38" width="24" height="32" rx="7" fill="#0070F0"/><rect x="96" y="38" width="24" height="32" rx="7" fill="#0070F0"/><rect x="88" y="2" width="22" height="20" rx="6" fill="#97E152"/><rect x="10" y="86" width="22" height="20" rx="6" fill="#97E152"/></svg></div>);}
 
@@ -262,7 +260,7 @@ function TeamsView({onSelect}){
 
   const seniorLeaders=[byId["18"],byId["21"],byId["22"],byId["19"],byId["20"]].filter(Boolean);
 
-  const deptOrder=["Central Office","Business Operations","Craft Consulting","Craft Insights","Customer Success","Instructional Innovation","Marketing","Partnership Development","Product & Technology","Product Management","Solution Engineering","Technology","Workforce & WIOA","Workforce Partnership"];
+  const deptOrder=["Central Office","Business Operations","Craft Consulting","Craft Insights","Customer Success","Instructional Innovation","Marketing","Partnership Development","Product & Technology","Product Management","Solution Engineering","Engineering","Workforce & WIOA","Workforce Partnership"];
 
   // Get all depts in a leader's subtree
   function getSubtreeDepts(empId,visited=new Set()){
