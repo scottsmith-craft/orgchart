@@ -112,10 +112,8 @@ const TREE={
   101:{name:"Hudson Baird",title:"Contractor",dept:"Instructional Innovation",loc:"Remote",tz:"CT",flags:{contractor:true},children:[]},
   102:{name:"Addison Watson",title:"Manager, Regional Workforce Development Board Partner Success",dept:"Workforce & WIOA",loc:"Remote",tz:"CT",flags:{team:"Workforce",},children:[]},
   103:{name:"Geralyn Smith",title:"Research Analyst",dept:"Workforce & WIOA",loc:"Remote",tz:"CT",flags:{team:"Workforce",},children:[]},
-  105:{name:"Ryan Shellen",title:"Manager, Technical Sales Account Executive",dept:"Partnership Development",loc:"Remote",tz:"MT",flags:{team:"Partnership Development",},children:[107,108]},
+  105:{name:"Ryan Shellen",title:"Manager, Technical Sales Account Executive",dept:"Partnership Development",loc:"Remote",tz:"MT",flags:{team:"Partnership Development",},children:[]},
   106:{name:"Sonia Cassatt",title:"Senior Technical Partnerships Manager, K12",dept:"Partnership Development",loc:"Remote",tz:"PT",flags:{team:"Partnership Development",},children:[]},
-  107:{name:"Daniel Saunders",title:"Business Development Representative",dept:"Partnership Development",loc:"Remote",tz:"ET",flags:{team:"Partnership Development",},children:[]},
-  108:{name:"Ray Valenzuela",title:"Business Development Representative",dept:"Partnership Development",loc:"Remote",tz:"CT",flags:{team:"Partnership Development",},children:[]},
   109:{name:"Adam Marinelli",title:"Regional Workforce Development Board Manager",dept:"Workforce Partnership",loc:"Remote",tz:"ET",flags:{team:"Workforce",},children:[]},
   110:{name:"Wendy Parker",title:"Regional Workforce Development Board Manager",dept:"Workforce Partnership",loc:"Remote",tz:"ET",flags:{team:"Workforce",},children:[]},
   111:{name:"Dan McGrew",title:"Contractor",dept:"Workforce Partnership",loc:"Remote",tz:"ET",flags:{contractor:true},children:[]},
@@ -150,7 +148,7 @@ const TREE={
   142:{name:"Dangerfield Moore",title:"Senior Product Manager",dept:"Product Management",loc:"Nashville Office",tz:"CT",flags:{team:"Product"},children:[]},
   143:{name:"Terrance Hopson",title:"Regional Vice President Regional Operations — Midwest",dept:"WGU",loc:"Remote",tz:"CT",flags:{wgu:true},children:[]},
   144:{name:"Lauren Brady",title:"Procurement Sourcing Specialist",dept:"WGU",loc:"SLC Office",tz:"MT",flags:{wgu:true},children:[]},
-  145:{name:"Ryan Wilson",title:"Contractor (CRB Workforce LLC)",dept:"Product Management",loc:"Remote",tz:"MT",flags:{contractor:true},children:[]},
+  145:{name:"Ryan Wilson",title:"Contractor (CRB Workforce LLC)",dept:"Product Management",loc:"Remote",tz:"PT",flags:{contractor:true},children:[]},
 };
 
 const employees=Object.entries(TREE).map(([id,node])=>({id:String(id),name:node.name,title:node.title,dept:node.dept,loc:node.loc,tz:node.tz,reports:node.children.map(String),manager:null,hired:node.flags.hired||false,startDate:node.flags.startDate||null,...node.flags}));
