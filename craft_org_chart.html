@@ -43,7 +43,7 @@ const TREE={
   13:{name:"Angela Jackson",title:"Contractor",dept:"Central Office",loc:"Remote",tz:"ET",flags:{contractor:true},children:[]},
   14:{name:"Heather Webb",title:"Contractor",dept:"Central Office",loc:"Remote",tz:"MT",flags:{contractor:true},children:[]},
   17:{name:"Tamika Graham",title:"Contractor",dept:"Central Office",loc:"Remote",tz:"GMT",flags:{contractor:true},children:[]},
-  18:{name:"Patty Moore",title:"Head of Product & Technology",dept:"Product & Technology",loc:"SLC Office",tz:"MT",flags:{team:"Product & Technology",sortOverride:"rank1"},children:[50,128,52,51,76]},
+  18:{name:"Patty Moore",title:"Head of Product & Technology",dept:"Product & Technology",loc:"SLC Office",tz:"MT",flags:{team:"Product & Technology",sortOverride:"rank1"},children:[50,128,52,51,76,151]},
   19:{name:"Melinda Perez",title:"Senior Manager, Business Operations",dept:"Business Operations",loc:"Remote",tz:"ET",flags:{team:"Biz Ops",sortOverride:"rank4"},children:[66,67]},
   20:{name:"Patricia Saenz-Armstrong",title:"Senior Manager, Data and Research Initiatives",dept:"Craft Insights",loc:"Remote",tz:"ET",flags:{team:"Craft Insights",sortOverride:"rank5"},children:[68,69,70,71,73]},
   21:{name:"John Suk",title:"Director, Business Development",dept:"Business Development",loc:"Nashville Office",tz:"CT",flags:{sortOverride:"rank2"},children:[90,89,91,109,92]},
@@ -130,6 +130,7 @@ const TREE={
   149:{name:"Yuliana Alzate",title:"Contractor (Try Catch)",dept:"Engineering",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
   147:{name:"Daniel Curtis",title:"Contractor",dept:"Central Office",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
   150:{name:"Kent McArt",title:"Contractor",dept:"Product Management",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
+  151:{name:"TBH-MGR-TECH",title:"Manager, Technology",dept:"Product & Technology",loc:"",tz:"",flags:{tbh:true},children:[]},
 };
 
 const employees=Object.entries(TREE).map(([id,node])=>({id:String(id),name:node.name,title:node.title,dept:node.dept,loc:node.loc,tz:node.tz,reports:node.children.map(String),manager:null,hired:node.flags.hired||false,startDate:node.flags.startDate||null,...node.flags}));
