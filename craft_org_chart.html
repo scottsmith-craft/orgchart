@@ -130,7 +130,7 @@ const TREE={
   149:{name:"Yuliana Alzate",title:"Contractor (Try Catch)",dept:"Engineering",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
   147:{name:"Daniel Curtis",title:"Contractor",dept:"Central Office",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
   150:{name:"Kent McArt",title:"Contractor",dept:"Product Management",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
-  151:{name:"TBH-MGR-TECH",title:"Manager, Technology",dept:"Product & Technology",loc:"",tz:"",flags:{tbh:true},children:[]},
+  151:{name:"TBH-MGR-TECH",title:"Manager, Technology",dept:"Product & Technology",loc:"Nashville Office",tz:"CT",flags:{tbh:true},children:[]},
 };
 
 const employees=Object.entries(TREE).map(([id,node])=>({id:String(id),name:node.name,title:node.title,dept:node.dept,loc:node.loc,tz:node.tz,reports:node.children.map(String),manager:null,hired:node.flags.hired||false,startDate:node.flags.startDate||null,...node.flags}));
