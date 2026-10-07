@@ -156,16 +156,21 @@ const byName=Object.fromEntries(employees.map(e=>[e.name,e]));
 Object.entries(TREE).forEach(([parentId,node])=>{node.children.forEach(childId=>{const child=byId[String(childId)];if(child)child.manager=node.name;});});
 employees.forEach(e=>{if(e.group)e.title=`Group · ${e.reports.length} members`;});
 const wguMembers=[2,3,4,5,6,7,8,9,200,203,204,205,206,207,208,209,210,211,212,213].map(id=>byId[String(id)]);
-const WGU_GROUPS=[
+const WGU_PARTNERS=[
   {label:"Advancement",ids:[2]},
-  {label:"People & Talent",ids:[3,4,211]},
+  {label:"People & Talent",ids:[3,4]},
   {label:"Legal",ids:[5]},
-  {label:"Finance & Accounting",ids:[6,207,209,213]},
-  {label:"Procurement",ids:[9,205,206,210,212]},
-  {label:"Communications",ids:[7,8]},
-  {label:"Security & IT",ids:[200,203,208]},
+  {label:"Finance",ids:[6]},
+  {label:"Communications",ids:[7]},
   {label:"Regional",ids:[204]},
 ];
+const WGU_CONTACTS=[
+  {label:"People & Talent",ids:[211]},
+  {label:"Finance & Accounting",ids:[207,209,213]},
+  {label:"Procurement",ids:[9,205,206,210,212]},
+  {label:"Security & IT",ids:[200,203,208]},
+];
+const WGU_GROUPS=[...WGU_PARTNERS,...WGU_CONTACTS];
 const craftRoot=byId["10"];
 const craftEmps=employees.filter(e=>!e.wgu);
 const HIDDEN_DEPTS=new Set(["Grant Administration","Executive Leadership","WGU"]);
@@ -218,24 +223,29 @@ function WGURow({onSelect,filterFn}){
       <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:10}}>
         <span style={{fontSize:12,fontWeight:800,color:BRAND.sky,textTransform:"uppercase",letterSpacing:"0.07em"}}>WGU Partners</span>
       </div>
-      <div style={{display:"flex",flexDirection:"column",gap:10}}>
-        {visibleGroups.map(g=>(
-          <div key={g.label}>
-            <div style={{fontSize:9,fontWeight:800,color:BRAND.sky,textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:5,opacity:0.7}}>{g.label}</div>
-            <div style={{display:"flex",flexDirection:"column",gap:3}}>
-              {g.members.map(emp=>{return(
-                <div key={emp.id} onClick={()=>onSelect(emp)} style={{display:"flex",alignItems:"center",gap:8,background:BRAND.white,borderRadius:7,padding:"6px 10px",border:`1px solid ${BRAND.sky}33`,cursor:"pointer",transition:"box-shadow 0.12s"}} onMouseEnter={e=>e.currentTarget.style.boxShadow=`0 2px 8px ${BRAND.sky}33`} onMouseLeave={e=>e.currentTarget.style.boxShadow="none"}>
-                  <Avatar emp={emp} size={26}/>
-                  <div style={{flex:1,minWidth:0}}>
-                    <div style={{fontSize:11.5,fontWeight:600,color:BRAND.navy,fontStyle:"italic"}}>{emp.name}</div>
-                    <div style={{fontSize:9.5,color:BRAND.textMuted,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{emp.title}</div>
-                  </div>
+      {[{title:"Strategic Partners",groups:WGU_PARTNERS},{title:"Service Contacts",groups:WGU_CONTACTS}].map(section=>{
+        const sGroups=section.groups.map(g=>({...g,members:g.ids.map(id=>byId[String(id)]).filter(Boolean).filter(e=>!filterFn||filterFn(e))})).filter(g=>g.members.length>0);
+        if(!sGroups.length)return null;
+        return(<div key={section.title} style={{marginBottom:10}}>
+          <div style={{fontSize:9,fontWeight:900,color:BRAND.sky,textTransform:"uppercase",letterSpacing:"0.1em",marginBottom:7,paddingBottom:4,borderBottom:`1px solid ${BRAND.sky}22`}}>{section.title}</div>
+          <div style={{display:"flex",flexDirection:"column",gap:8}}>
+            {sGroups.map(g=>(
+              <div key={g.label}>
+                <div style={{fontSize:8.5,fontWeight:800,color:BRAND.sky,textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:4,opacity:0.6}}>{g.label}</div>
+                <div style={{display:"flex",flexDirection:"column",gap:3}}>
+                  {g.members.map(emp=>(<div key={emp.id} onClick={()=>onSelect(emp)} style={{display:"flex",alignItems:"center",gap:8,background:BRAND.white,borderRadius:7,padding:"6px 10px",border:`1px solid ${BRAND.sky}33`,cursor:"pointer",transition:"box-shadow 0.12s"}} onMouseEnter={e=>e.currentTarget.style.boxShadow=`0 2px 8px ${BRAND.sky}33`} onMouseLeave={e=>e.currentTarget.style.boxShadow="none"}>
+                    <Avatar emp={emp} size={26}/>
+                    <div style={{flex:1,minWidth:0}}>
+                      <div style={{fontSize:11.5,fontWeight:600,color:BRAND.navy,fontStyle:"italic"}}>{emp.name}</div>
+                      <div style={{fontSize:9.5,color:BRAND.textMuted,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{emp.title}</div>
+                    </div>
+                  </div>))}
                 </div>
-              );})}
-            </div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </div>);
+      })}
     </div>
   </div>);
 }
@@ -257,22 +267,27 @@ function ListView({onSelect,activeDept,searchTerm}){
     <div style={{width:8,height:8,borderRadius:"50%",background:BRAND.sky}}/>
     <h3 style={{margin:0,fontSize:13,fontWeight:800,color:BRAND.navy}}>WGU Partners</h3>
   </div>
-  <div style={{display:"flex",flexDirection:"column",gap:16}}>
-    {WGU_GROUPS.map(g=>{
-      const members=g.ids.map(id=>byId[String(id)]).filter(Boolean).filter(mFn);
-      if(!members.length)return null;
-      return(<div key={g.label}>
-        <div style={{fontSize:10,fontWeight:800,color:BRAND.sky,textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:6,paddingLeft:4}}>{g.label}</div>
-        {members.map(emp=>{return(
-          <div key={emp.id} onClick={()=>onSelect(emp)} style={{display:"flex",alignItems:"center",gap:12,marginBottom:4,background:"#EEF7FD",border:`1.5px dashed ${BRAND.sky}`,borderLeft:`4px solid ${BRAND.sky}`,borderRadius:10,padding:"9px 14px",cursor:"pointer",transition:"box-shadow 0.12s"}} onMouseEnter={e=>e.currentTarget.style.boxShadow=`0 2px 10px ${BRAND.sky}33`} onMouseLeave={e=>e.currentTarget.style.boxShadow="none"}>
-            <Avatar emp={emp} size={32}/>
-            <div style={{flex:1,minWidth:0}}>
-              <div style={{fontWeight:600,fontSize:13,color:BRAND.navy,fontStyle:"italic"}}>{emp.name}</div>
-              <div style={{fontSize:11,color:BRAND.textMuted,marginTop:1}}>{emp.title}</div>
-              <div style={{fontSize:10,color:BRAND.sky,marginTop:2}}>{emp.loc}{emp.tz?` · ${emp.tz}`:""}</div>
-            </div>
-          </div>
-        );})}
+  <div style={{display:"flex",flexDirection:"column",gap:20}}>
+    {[{title:"Strategic Partners",groups:WGU_PARTNERS},{title:"Service Contacts",groups:WGU_CONTACTS}].map(section=>{
+      const sGroups=section.groups.map(g=>({...g,members:g.ids.map(id=>byId[String(id)]).filter(Boolean).filter(mFn)})).filter(g=>g.members.length>0);
+      if(!sGroups.length)return null;
+      return(<div key={section.title}>
+        <div style={{fontSize:10.5,fontWeight:900,color:BRAND.sky,textTransform:"uppercase",letterSpacing:"0.1em",marginBottom:10,paddingBottom:5,borderBottom:`1.5px solid ${BRAND.sky}33`}}>{section.title}</div>
+        <div style={{display:"flex",flexDirection:"column",gap:14}}>
+          {sGroups.map(g=>{
+            return(<div key={g.label}>
+              <div style={{fontSize:10,fontWeight:800,color:BRAND.sky,textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:6,paddingLeft:4,opacity:0.7}}>{g.label}</div>
+              {g.members.map(emp=>(<div key={emp.id} onClick={()=>onSelect(emp)} style={{display:"flex",alignItems:"center",gap:12,marginBottom:4,background:"#EEF7FD",border:`1.5px dashed ${BRAND.sky}`,borderLeft:`4px solid ${BRAND.sky}`,borderRadius:10,padding:"9px 14px",cursor:"pointer",transition:"box-shadow 0.12s"}} onMouseEnter={e=>e.currentTarget.style.boxShadow=`0 2px 10px ${BRAND.sky}33`} onMouseLeave={e=>e.currentTarget.style.boxShadow="none"}>
+                <Avatar emp={emp} size={32}/>
+                <div style={{flex:1,minWidth:0}}>
+                  <div style={{fontWeight:600,fontSize:13,color:BRAND.navy,fontStyle:"italic"}}>{emp.name}</div>
+                  <div style={{fontSize:11,color:BRAND.textMuted,marginTop:1}}>{emp.title}</div>
+                  <div style={{fontSize:10,color:BRAND.sky,marginTop:2}}>{emp.loc}{emp.tz?` · ${emp.tz}`:""}</div>
+                </div>
+              </div>))}
+            </div>);
+          })}
+        </div>
       </div>);
     })}
   </div>
