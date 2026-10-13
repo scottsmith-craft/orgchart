@@ -221,42 +221,205 @@ function FilteredNode({emp,depth,onSelect,matchFn}){
   return(<div>{show&&<div style={{display:"flex",alignItems:"center",paddingLeft:depth*INDENT,marginBottom:4,position:"relative"}}>{depth>0&&<div style={{position:"absolute",left:depth*INDENT-14,top:"50%",transform:"translateY(-50%)",width:10,height:1,background:BRAND.gray}}/>}<div style={{flex:1,minWidth:0,maxWidth:520}}><Card emp={emp} onSelect={onSelect} isRoot={depth===0} faded={isAnc} isMgr={emp.reports.length>0&&!emp.manager} isMidMgr={emp.reports.length>0&&!!emp.manager}/></div></div>}{mc.length>0&&<div style={{position:"relative"}}><div style={{position:"absolute",left:nd*INDENT-14,top:0,bottom:8,width:1,background:BRAND.gray}}/>{mc.map(c=><FilteredNode key={c.id} emp={c} depth={nd} onSelect={onSelect} matchFn={matchFn}/>)}</div>}</div>);
 }
 
-function WGURow({onSelect,filterFn}){
-  const visibleGroups=WGU_GROUPS.map(g=>({...g,members:g.ids.map(id=>byId[String(id)]).filter(Boolean).filter(e=>!filterFn||filterFn(e))})).filter(g=>g.members.length>0);
-  if(visibleGroups.length===0)return null;
+function WGURow({onSelect,filterFn,forceOpen}){
+  const[open,setOpen]=useState(false);
+  const isOpen=forceOpen||open;
+  const partnerCount=WGU_PARTNERS.reduce((sum,g)=>sum+g.ids.map(id=>byId[String(id)]).filter(Boolean).filter(e=>!filterFn||filterFn(e)).length,0);
+  const contactCount=WGU_CONTACTS.reduce((sum,g)=>sum+g.ids.map(id=>byId[String(id)]).filter(Boolean).filter(e=>!filterFn||filterFn(e)).length,0);
+  if(partnerCount+contactCount===0)return null;
   return(<div style={{marginBottom:4,paddingLeft:INDENT,position:"relative"}}>
-    <div style={{position:"absolute",left:INDENT-14,top:28,width:10,height:1,background:BRAND.sky,opacity:0.5}}/>
-    <div style={{background:"#EEF7FD",border:`1.5px dashed ${BRAND.sky}`,borderLeft:`4px solid ${BRAND.sky}`,borderRadius:10,padding:"10px 14px",maxWidth:380}}>
-      <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:10}}>
-        <span style={{fontSize:12,fontWeight:800,color:BRAND.sky,textTransform:"uppercase",letterSpacing:"0.07em"}}>WGU Partners</span>
+    <div style={{position:"absolute",left:INDENT-14,top:22,width:10,height:1,background:BRAND.sky,opacity:0.5}}/>
+    <div style={{background:"#EEF7FD",border:`1.5px dashed ${BRAND.sky}`,borderLeft:`4px solid ${BRAND.sky}`,borderRadius:10,maxWidth:440,overflow:"hidden"}}>
+      {/* Header — always visible, click to toggle */}
+      <div onClick={()=>setOpen(o=>!o)} style={{display:"flex",alignItems:"center",gap:10,padding:"9px 14px",cursor:"pointer"}}>
+        <span style={{fontSize:12,fontWeight:800,color:BRAND.sky,textTransform:"uppercase",letterSpacing:"0.07em",flexShrink:0}}>WGU Partners</span>
+        <div style={{display:"flex",gap:6,flex:1}}>
+          <span style={{fontSize:10,fontWeight:700,color:BRAND.sky,background:"rgba(70,177,239,0.12)",borderRadius:10,padding:"2px 8px",border:`1px solid ${BRAND.sky}44`,whiteSpace:"nowrap"}}>Strategic Partners · {partnerCount}</span>
+          <span style={{fontSize:10,fontWeight:700,color:BRAND.sky,background:"rgba(70,177,239,0.12)",borderRadius:10,padding:"2px 8px",border:`1px solid ${BRAND.sky}44`,whiteSpace:"nowrap"}}>Service Contacts · {contactCount}</span>
+        </div>
+        <span style={{fontSize:11,color:BRAND.sky,fontWeight:700,flexShrink:0}}>{isOpen?"▲":"▼"}</span>
       </div>
-      {[{title:"Strategic Partners",groups:WGU_PARTNERS},{title:"Service Contacts",groups:WGU_CONTACTS}].map(section=>{
-        const sGroups=section.groups.map(g=>({...g,members:g.ids.map(id=>byId[String(id)]).filter(Boolean).filter(e=>!filterFn||filterFn(e))})).filter(g=>g.members.length>0);
-        if(!sGroups.length)return null;
-        return(<div key={section.title} style={{marginBottom:10}}>
-          <div style={{fontSize:9,fontWeight:900,color:BRAND.sky,textTransform:"uppercase",letterSpacing:"0.1em",marginBottom:7,paddingBottom:4,borderBottom:`1px solid ${BRAND.sky}22`}}>{section.title}</div>
-          <div style={{display:"flex",flexDirection:"column",gap:8}}>
-            {sGroups.map(g=>(
-              <div key={g.label}>
-                <div style={{fontSize:8.5,fontWeight:800,color:BRAND.sky,textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:4,opacity:0.6}}>{g.label}</div>
-                <div style={{display:"flex",flexDirection:"column",gap:3}}>
-                  {g.members.map(emp=>(<div key={emp.id} onClick={()=>onSelect(emp)} style={{display:"flex",alignItems:"center",gap:8,background:BRAND.white,borderRadius:7,padding:"6px 10px",border:`1px solid ${BRAND.sky}33`,cursor:"pointer",transition:"box-shadow 0.12s"}} onMouseEnter={e=>e.currentTarget.style.boxShadow=`0 2px 8px ${BRAND.sky}33`} onMouseLeave={e=>e.currentTarget.style.boxShadow="none"}>
-                    <Avatar emp={emp} size={26}/>
-                    <div style={{flex:1,minWidth:0}}>
-                      <div style={{fontSize:11.5,fontWeight:600,color:BRAND.navy,fontStyle:"italic"}}>{emp.name}</div>
-                      <div style={{fontSize:9.5,color:BRAND.textMuted,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{emp.title}</div>
-                    </div>
-                  </div>))}
+      {/* Expanded content */}
+      {isOpen&&<div style={{padding:"0 14px 12px",borderTop:`1px solid ${BRAND.sky}22`}}>
+        {[{title:"Strategic Partners",groups:WGU_PARTNERS},{title:"Service Contacts",groups:WGU_CONTACTS}].map(section=>{
+          const sGroups=section.groups.map(g=>({...g,members:g.ids.map(id=>byId[String(id)]).filter(Boolean).filter(e=>!filterFn||filterFn(e))})).filter(g=>g.members.length>0);
+          if(!sGroups.length)return null;
+          return(<div key={section.title} style={{marginTop:10}}>
+            <div style={{fontSize:9,fontWeight:900,color:BRAND.sky,textTransform:"uppercase",letterSpacing:"0.1em",marginBottom:7,paddingBottom:4,borderBottom:`1px solid ${BRAND.sky}22`}}>{section.title}</div>
+            <div style={{display:"flex",flexDirection:"column",gap:8}}>
+              {sGroups.map(g=>(
+                <div key={g.label}>
+                  <div style={{fontSize:8.5,fontWeight:800,color:BRAND.sky,textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:4,opacity:0.6}}>{g.label}</div>
+                  <div style={{display:"flex",flexDirection:"column",gap:3}}>
+                    {g.members.map(emp=>(<div key={emp.id} onClick={()=>onSelect(emp)} style={{display:"flex",alignItems:"center",gap:8,background:BRAND.white,borderRadius:7,padding:"6px 10px",border:`1px solid ${BRAND.sky}33`,cursor:"pointer",transition:"box-shadow 0.12s"}} onMouseEnter={e=>e.currentTarget.style.boxShadow=`0 2px 8px ${BRAND.sky}33`} onMouseLeave={e=>e.currentTarget.style.boxShadow="none"}>
+                      <Avatar emp={emp} size={26}/>
+                      <div style={{flex:1,minWidth:0}}>
+                        <div style={{fontSize:11.5,fontWeight:600,color:BRAND.navy}}>{emp.name}</div>
+                        <div style={{fontSize:9.5,color:BRAND.textMuted,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{emp.title}</div>
+                      </div>
+                    </div>))}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>);
-      })}
+              ))}
+            </div>
+          </div>);
+        })}
+      </div>}
     </div>
   </div>);
 }
 
+function TeamsView({onCard}){
+  const[expandedDepts,setExpandedDepts]=useState(new Set());
+  const toggleDept=key=>{setExpandedDepts(prev=>{const n=new Set(prev);n.has(key)?n.delete(key):n.add(key);return n;});};
+
+  const seniorLeaders=[byId["18"],byId["21"],byId["22"],byId["19"],byId["152"],byId["20"]].filter(Boolean);
+
+  const deptOrder=["Central Office","Academic Programs","Business Development","Business Operations","Craft Consulting","Craft Insights","Customer Success","Engineering","Instructional Innovation","Marketing","Product & Technology","Product Management","Workforce & WIOA"];
+
+  function getSubtreeDepts(empId,visited=new Set()){
+    if(visited.has(empId))return new Set();
+    visited.add(empId);
+    const emp=byId[String(empId)];
+    if(!emp)return new Set();
+    const depts=new Set();
+    if(!emp.group&&!emp.wgu&&emp.dept)depts.add(emp.dept);
+    (emp.reports||[]).forEach(cid=>getSubtreeDepts(cid,visited).forEach(d=>depts.add(d)));
+    return depts;
+  }
+
+  function getDeptPeople(empId,dept,visited=new Set()){
+    if(visited.has(empId))return[];
+    visited.add(empId);
+    const emp=byId[String(empId)];
+    if(!emp)return[];
+    const results=[];
+    if(!emp.group&&!emp.wgu&&emp.dept===dept)results.push(emp);
+    (emp.reports||[]).forEach(cid=>getDeptPeople(cid,dept,visited).forEach(e=>results.push(e)));
+    return results;
+  }
+
+  function buildDeptTree(people,leaderId){
+    const peopleIds=new Set(people.map(e=>e.id));
+    const roots=people.filter(e=>{
+      if(!e.manager)return true;
+      const mgr=byName[e.manager];
+      if(!mgr)return true;
+      let cur=mgr;
+      while(cur&&cur.group){cur=cur.manager?byName[cur.manager]:null;}
+      if(!cur)return true;
+      return!peopleIds.has(cur.id);
+    });
+    return roots;
+  }
+
+  function PersonRow({emp,dcolor,depth=0,allDeptPeople}){
+    const peopleIds=new Set(allDeptPeople.map(e=>e.id));
+    const deptChildren=(emp.reports||[]).map(id=>byId[id]).filter(Boolean).filter(c=>!c.group&&!c.wgu&&peopleIds.has(c.id));
+    const indent=depth*20;
+    const isMgr=deptChildren.length>0;
+    const bgStyle=emp.contractor?`repeating-linear-gradient(45deg,#fff,#fff 4px,#f5f7fa 4px,#f5f7fa 8px)`:BRAND.white;
+    return(
+      <div>
+        <div onClick={()=>onCard(emp)} style={{display:"flex",alignItems:"center",gap:9,padding:"7px 10px",marginLeft:indent,borderRadius:8,border:emp.contractor?`1px dashed ${dcolor}`:emp.tbh?`1.5px dashed ${emp.hired?"#7C3AED":dcolor}`:`1px solid ${BRAND.gray}`,background:bgStyle,cursor:"pointer",maxWidth:500,marginBottom:3,transition:"box-shadow 0.12s"}} onMouseEnter={e=>e.currentTarget.style.boxShadow=`0 2px 8px ${dcolor}22`} onMouseLeave={e=>e.currentTarget.style.boxShadow="none"}>
+          <Avatar emp={emp} size={28}/>
+          <div style={{flex:1,minWidth:0}}>
+            <div style={{fontSize:12,fontWeight:isMgr?700:400,color:emp.tbh?BRAND.textMuted:BRAND.navy,display:"flex",alignItems:"center",gap:5,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
+              {emp.tbh?(emp.hired?`Starting ${emp.startDate}`:"Open Role"):emp.name}
+              {emp.tbh&&emp.hired&&<span style={{fontSize:9,fontWeight:900,background:"#7C3AED",color:"#fff",borderRadius:4,padding:"1px 5px"}}>HIRED</span>}
+              {emp.tbh&&!emp.hired&&<span style={{fontSize:9,fontWeight:900,background:BRAND.lime,color:"#1a3300",borderRadius:4,padding:"1px 5px"}}>OPEN</span>}
+              {emp.contractor&&<span style={{fontSize:9,background:"#e8edf2",color:BRAND.textMuted,borderRadius:4,padding:"1px 4px",border:`1px solid ${BRAND.gray}`,fontWeight:700}}>C</span>}
+            </div>
+            <div style={{fontSize:10.5,color:BRAND.textMuted,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{emp.title}</div>
+          </div>
+        </div>
+        {deptChildren.length>0&&(
+          <div style={{marginLeft:indent+12,paddingLeft:8,borderLeft:`2px solid ${dcolor}30`,marginBottom:4}}>
+            {deptChildren.map(c=><PersonRow key={c.id} emp={c} dcolor={dcolor} depth={0} allDeptPeople={allDeptPeople}/>)}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  return(
+    <div style={{height:"100%",overflowY:"auto"}}>
+      <div style={{padding:"28px 32px 80px",maxWidth:900,margin:"0 auto"}}>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:20}}>
+          <p style={{fontSize:12,color:BRAND.textMuted,lineHeight:1.5,margin:0}}>Each leader's domains at a glance. Click any team chip to expand it.</p>
+          <div style={{display:"flex",gap:6,flexShrink:0}}>
+            <button onClick={()=>{const allKeys=[];seniorLeaders.forEach(l=>{const depts=[...getSubtreeDepts(l.id)].filter(d=>deptOrder.includes(d));depts.forEach(d=>allKeys.push(l.id+":"+d));});setExpandedDepts(new Set(allKeys));}} style={{fontSize:11,color:BRAND.blue,background:"none",border:`1px solid ${BRAND.blue}`,borderRadius:6,padding:"5px 11px",cursor:"pointer",fontWeight:600}}>Expand All</button>
+            <button onClick={()=>setExpandedDepts(new Set())} style={{fontSize:11,color:BRAND.textMuted,background:"none",border:`1px solid ${BRAND.gray}`,borderRadius:6,padding:"5px 11px",cursor:"pointer",fontWeight:600}}>Collapse All</button>
+          </div>
+        </div>
+        {seniorLeaders.map(leader=>{
+          const color=dc(leader.dept);
+          const subtreeDepts=[...getSubtreeDepts(leader.id)].filter(d=>deptOrder.includes(d));
+          const sortedOwned=[...new Set(subtreeDepts)].sort((a,b)=>deptOrder.indexOf(a)-deptOrder.indexOf(b));
+          return(
+            <div key={leader.id} style={{marginBottom:28,background:BRAND.white,border:`1.5px solid ${BRAND.gray}`,borderLeft:`5px solid ${color}`,borderRadius:12,overflow:"hidden",boxShadow:"0 2px 8px rgba(0,40,85,0.06)"}}>
+              <div onClick={()=>onCard(leader)} style={{display:"flex",alignItems:"center",gap:12,padding:"14px 18px",cursor:"pointer",background:"#F8FAFC"}} onMouseEnter={e=>e.currentTarget.style.background="#F0F4F8"} onMouseLeave={e=>e.currentTarget.style.background="#F8FAFC"}>
+                <div style={{width:44,height:44,borderRadius:10,background:color,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}><span style={{fontSize:20,color:"#fff",fontWeight:800}}>{leader.dept==="Product & Technology"?"P&T":leader.dept.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase()}</span></div>
+                <div style={{flex:1,minWidth:0}}>
+                  <div style={{fontWeight:800,fontSize:15,color:BRAND.navy,letterSpacing:"-0.01em"}}>{leader.dept}</div>
+                  <div style={{fontSize:11,color:BRAND.textMuted,marginTop:3,display:"flex",alignItems:"center",gap:6}}>
+                    <Avatar emp={leader} size={16}/>
+                    <span>{leader.name} · {leader.title}</span>
+                  </div>
+                </div>
+                <div style={{fontSize:10,color:BRAND.textMuted,background:BRAND.white,border:`1px solid ${BRAND.gray}`,borderRadius:6,padding:"3px 8px",flexShrink:0}}>{sortedOwned.length} {sortedOwned.length===1?"team":"teams"}</div>
+              </div>
+              <div style={{padding:"12px 18px",display:"flex",flexDirection:"column",gap:6,borderTop:`1px solid ${BRAND.gray}`}}>
+                {sortedOwned.map(dept=>{
+                  const dcolor=dc(dept);
+                  const key=leader.id+":"+dept;
+                  const isExp=expandedDepts.has(key);
+                  const allDeptPeople=getDeptPeople(leader.id,dept).filter(e=>e.id!==leader.id);
+                  const ftes=allDeptPeople.filter(e=>!e.contractor&&!e.tbh&&!e.group&&!e.wgu);
+                  const openRoles=allDeptPeople.filter(e=>e.tbh);
+                  const contractors=allDeptPeople.filter(e=>e.contractor);
+                  const roots=buildDeptTree(ftes,leader.id);
+                  const count=allDeptPeople.length;
+                  return(
+                    <div key={dept}>
+                      <button onClick={()=>toggleDept(key)} style={{display:"inline-flex",alignItems:"center",gap:6,padding:"5px 14px",borderRadius:20,border:`1.5px solid ${isExp?dcolor:dcolor+"55"}`,background:isExp?dcolor:"transparent",color:isExp?BRAND.white:dcolor,fontSize:11.5,fontWeight:700,cursor:"pointer",transition:"all 0.15s"}}>
+                        <span style={{width:6,height:6,borderRadius:"50%",background:isExp?BRAND.white:dcolor,flexShrink:0,display:"inline-block"}}/>
+                        {dept}
+                        <span style={{fontSize:10,fontWeight:600,opacity:0.8}}>· {count}</span>
+                        <span style={{fontSize:10,marginLeft:2}}>{isExp?"▲":"▼"}</span>
+                      </button>
+                      {isExp&&(
+                        <div style={{marginTop:10,marginBottom:6,paddingLeft:4}}>
+                          {roots.length>0&&(
+                            <div style={{marginBottom:openRoles.length>0||contractors.length>0?10:0}}>
+                              {roots.map(emp=><PersonRow key={emp.id} emp={emp} dcolor={dcolor} depth={0} allDeptPeople={ftes}/>)}
+                            </div>
+                          )}
+                          {openRoles.length>0&&(
+                            <div style={{marginBottom:contractors.length>0?10:0}}>
+                              <div style={{fontSize:9.5,fontWeight:700,color:BRAND.textMuted,textTransform:"uppercase",letterSpacing:"0.06em",marginBottom:5}}>Open Roles</div>
+                              {openRoles.map(emp=><PersonRow key={emp.id} emp={emp} dcolor={dcolor} depth={0} allDeptPeople={openRoles}/>)}
+                            </div>
+                          )}
+                          {contractors.length>0&&(
+                            <div>
+                              <div style={{fontSize:9.5,fontWeight:700,color:BRAND.textMuted,textTransform:"uppercase",letterSpacing:"0.06em",marginBottom:5}}>Contractors</div>
+                              {contractors.map(emp=><PersonRow key={emp.id} emp={emp} dcolor={dcolor} depth={0} allDeptPeople={contractors}/>)}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
 function ListView({onSelect,activeDept,searchTerm}){
   const s=searchTerm.trim().toLowerCase();
   const mFn=emp=>{const ms=!s||emp.name.toLowerCase().includes(s)||emp.title.toLowerCase().includes(s)||emp.dept.toLowerCase().includes(s);const md=activeDept==="All"||(activeDept==="WGU"&&emp.wgu)||(activeDept==="Contractors"&&emp.contractor)||(activeDept==="Open Roles"&&emp.tbh)||(!emp.wgu&&!emp.group&&emp.dept===activeDept);return ms&&md;};
@@ -389,23 +552,35 @@ function App(){
       <div style={{background:BRAND.navy,padding:"10px 20px",flexShrink:0,borderBottom:"1px solid #00396e"}}>
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10}}>
           <div style={{display:"flex",alignItems:"center",gap:10}}><Logo/><div><div style={{color:BRAND.white,fontWeight:800,fontSize:15,letterSpacing:"-0.02em",lineHeight:1}}>Craft</div><div style={{color:"#4a7aaa",fontSize:11,marginTop:1}}>Org Chart 2026</div></div></div>
-          <div style={{display:"flex",background:"rgba(255,255,255,0.08)",borderRadius:8,padding:3}}>{[["tree","⬡ Tree"],["list","☰ List"]].map(([v,lbl])=>(<button key={v} onClick={()=>setView(v)} style={{padding:"4px 13px",borderRadius:6,border:"none",background:view===v?BRAND.blue:"transparent",color:view===v?BRAND.white:"rgba(255,255,255,0.6)",fontSize:11,fontWeight:600,cursor:"pointer",transition:"all 0.15s"}}>{lbl}</button>))}</div>
+
         </div>
         <div style={{display:"flex",flexWrap:"wrap",gap:5}}>{usedDepts.map(d=>{const active=activeDept===d&&!activeTeam&&!peopleLeaders;const c=d==="All"?BRAND.blue:d==="WGU"?BRAND.sky:d==="Contractors"?"#6B7A90":d==="Open Roles"?BRAND.lime:dc(d);return(<span key={d} style={{display:"flex",alignItems:"center",gap:5}}>{d==="WGU"&&<span style={{width:1,height:18,background:"rgba(255,255,255,0.2)",display:"inline-block",marginRight:2}}/>}<button onClick={()=>{setActiveDept(d);setActiveTeam(null);setPeopleLeaders(false);}} style={{padding:"4px 12px",borderRadius:20,border:active?`1.5px solid ${c}`:"1.5px solid transparent",background:active?c:"rgba(255,255,255,0.08)",color:active?BRAND.white:"rgba(255,255,255,0.6)",fontSize:11,fontWeight:600,cursor:"pointer",whiteSpace:"nowrap",transition:"all 0.15s"}}>{d}</button>{d==="Contractors"&&<button onClick={()=>{setPeopleLeaders(p=>!p);setActiveTeam(null);setActiveDept("All");}} style={{padding:"4px 12px",borderRadius:20,border:peopleLeaders?"1.5px solid #97E152":"1.5px solid transparent",background:peopleLeaders?"#97E152":"rgba(255,255,255,0.08)",color:peopleLeaders?"#1a3300":"rgba(255,255,255,0.6)",fontSize:11,fontWeight:600,cursor:"pointer",whiteSpace:"nowrap",transition:"all 0.15s"}}>People Leaders</button>}</span>);})}</div>
+      </div>
+      <div style={{background:"#EEF7FD",borderBottom:`1px solid #C8E6F7`,flexShrink:0,display:"flex"}}>
+        {[["tree","⬡","Tree","Reporting hierarchy"],["teams","⊞","Teams","Departments at a glance"],["list","☰","List","Everyone alphabetically"]].map(([v,icon,label,sub])=>{
+          const active=view===v;
+          return(<button key={v} onClick={()=>setView(v)} style={{flex:1,padding:"10px 0 8px",border:"none",borderBottom:active?`3px solid ${BRAND.blue}`:"3px solid transparent",background:"transparent",cursor:"pointer",transition:"all 0.15s",display:"flex",flexDirection:"column",alignItems:"center",gap:2}}>
+            <span style={{fontSize:16,lineHeight:1,opacity:active?1:0.35}}>{icon}</span>
+            <span style={{fontSize:12,fontWeight:700,color:active?BRAND.blue:BRAND.navy,lineHeight:1,opacity:active?1:0.5}}>{label}</span>
+            <span style={{fontSize:9,color:active?BRAND.blue:BRAND.navy,opacity:active?0.65:0.35,lineHeight:1}}>{sub}</span>
+          </button>);
+        })}
       </div>
       <div style={{background:"#F0F4F8",borderBottom:`1px solid ${BRAND.gray}`,padding:"8px 20px",display:"flex",alignItems:"center",gap:10,flexShrink:0}}>
         <div style={{position:"relative",flex:1,maxWidth:360}}><span style={{position:"absolute",left:11,top:"50%",transform:"translateY(-50%)",color:BRAND.textMuted,fontSize:14}}>🔍</span><input value={searchTerm} onChange={e=>setSearchTerm(e.target.value)} placeholder="Search name, title, or department…" style={{width:"100%",padding:"7px 30px 7px 34px",border:`1px solid ${BRAND.gray}`,borderRadius:8,fontSize:12,outline:"none",color:BRAND.navy,background:BRAND.white,boxSizing:"border-box"}}/>{searchTerm&&<button onClick={()=>setSearchTerm("")} style={{position:"absolute",right:8,top:"50%",transform:"translateY(-50%)",background:"none",border:"none",cursor:"pointer",color:BRAND.textMuted,fontSize:13}}>✕</button>}</div>
         <span style={{fontSize:11,color:BRAND.textMuted,flexShrink:0}}>{totalMatches} {totalMatches===1?"person":"people"} found</span>
-        {view==="tree"&&!filterActive&&<><button onClick={()=>setExpanded(new Set(employees.map(e=>e.id)))} style={{fontSize:11,color:BRAND.blue,background:"none",border:`1px solid ${BRAND.blue}`,borderRadius:6,padding:"5px 11px",cursor:"pointer",fontWeight:600,flexShrink:0}}>Expand All</button><button onClick={()=>setExpanded(new Set())} style={{fontSize:11,color:BRAND.textMuted,background:"none",border:`1px solid ${BRAND.gray}`,borderRadius:6,padding:"5px 11px",cursor:"pointer",fontWeight:600,flexShrink:0}}>Collapse</button></>}
+        {view==="tree"&&!filterActive&&<><button onClick={()=>setExpanded(new Set(employees.map(e=>e.id)))} style={{fontSize:11,color:BRAND.blue,background:"none",border:`1px solid ${BRAND.blue}`,borderRadius:6,padding:"5px 11px",cursor:"pointer",fontWeight:600,flexShrink:0}}>Expand All</button><button onClick={()=>setExpanded(new Set())} style={{fontSize:11,color:BRAND.textMuted,background:"none",border:`1px solid ${BRAND.gray}`,borderRadius:6,padding:"5px 11px",cursor:"pointer",fontWeight:600,flexShrink:0}}>Collapse</button></>}{view==="teams"&&<span style={{fontSize:11,color:BRAND.textMuted,flexShrink:0}}>Click a team chip to expand · Click a card for details</span>}
       </div>
       <div style={{flex:1,position:"relative",overflow:"hidden"}}>
         {view==="tree"?(
           <div ref={canvasRef} onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp} onMouseLeave={onMouseUp} style={{width:"100%",height:"100%",cursor:dragging?"grabbing":"grab",overflowY:"auto",overflowX:"hidden"}}>
             <div style={{transform:`translate(${pan.x}px,${pan.y}px) scale(${zoom})`,transformOrigin:"top left",transition:dragging?"none":"transform 0.08s ease",padding:"36px 40px 80px",minWidth:"max-content"}}>
               {filterActive?<FilteredNode emp={craftRoot} depth={0} onSelect={onCard} matchFn={matchFn}/>:<TreeNode emp={craftRoot} depth={0} expanded={expanded} onToggle={onToggle} onSelect={onCard}/>}
-              {showWGURow&&<WGURow onSelect={onCard} filterFn={wguMatchFn}/>}
+              {showWGURow&&<WGURow onSelect={onCard} filterFn={wguMatchFn} forceOpen={activeDept==="WGU"}/>}
             </div>
           </div>
+        ):view==="teams"?(
+          <div style={{height:"100%",overflowY:"auto"}}><TeamsView onCard={onCard}/></div>
         ):(
           <div style={{height:"100%",overflowY:"auto"}}><ListView onSelect={onCard} activeDept={activeDept} searchTerm={searchTerm}/></div>
         )}
