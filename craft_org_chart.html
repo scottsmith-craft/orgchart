@@ -281,7 +281,10 @@ function WGURow({onSelect,filterFn,forceOpen}){
   </div>);
 }
 
-function TeamsView({onCard,searchTerm}){
+function TeamsView({onCard,searchTerm,activeDept}){
+  const deptFilter=activeDept&&!["All","WGU","Contractors","Open Roles","Central Office"].includes(activeDept)?activeDept:null;
+  const typeOK=e=>activeDept==="Contractors"?!!e.contractor:activeDept==="Open Roles"?!!e.tbh:true;
+  const typeFilter=activeDept==="Contractors"||activeDept==="Open Roles";
   const q=(searchTerm||"").trim().toLowerCase();
   const matchesQ=e=>!q||e.name.toLowerCase().includes(q)||(e.title||"").toLowerCase().includes(q)||(e.dept||"").toLowerCase().includes(q)||(e.tbh&&"open role".includes(q));
   const[expandedDepts,setExpandedDepts]=useState(new Set());
@@ -356,6 +359,7 @@ function TeamsView({onCard,searchTerm}){
     );
   }
 
+  if(activeDept==="WGU"||activeDept==="Central Office")return(<div style={{padding:"60px 32px",textAlign:"center",color:BRAND.textMuted,fontSize:13}}>{activeDept==="WGU"?"WGU Partners":"Central Office"} isn't shown in the Teams view — switch to Tree or List to see {activeDept==="WGU"?"them":"it"}.</div>);
   return(
     <div style={{height:"100%",overflowY:"auto"}}>
       <div style={{padding:"28px 32px 80px",maxWidth:900,margin:"0 auto"}}>
@@ -369,8 +373,8 @@ function TeamsView({onCard,searchTerm}){
         {seniorLeaders.map(leader=>{
           const color=dc(leader.dept);
           const subtreeDepts=[...getSubtreeDepts(leader.id)].filter(d=>deptOrder.includes(d));
-          const sortedOwned=[...new Set(subtreeDepts)].sort((a,b)=>deptOrder.indexOf(a)-deptOrder.indexOf(b));
-          if(q&&!matchesQ(leader)&&!sortedOwned.some(d=>getDeptPeople(leader.id,d).some(e=>e.id!==leader.id&&matchesQ(e))))return null;
+          const sortedOwned=[...new Set(subtreeDepts)].sort((a,b)=>deptOrder.indexOf(a)-deptOrder.indexOf(b)).filter(d=>!deptFilter||d===deptFilter);
+          if((q||typeFilter||deptFilter)&&!sortedOwned.some(d=>getDeptPeople(leader.id,d).some(e=>e.id!==leader.id&&typeOK(e)&&(matchesQ(leader)||matchesQ(e)))))return null;
           return(
             <div key={leader.id} style={{marginBottom:28,background:BRAND.white,border:`1.5px solid ${BRAND.gray}`,borderLeft:`5px solid ${color}`,borderRadius:12,overflow:"hidden",boxShadow:"0 2px 8px rgba(0,40,85,0.06)"}}>
               <div onClick={()=>onCard(leader)} style={{display:"flex",alignItems:"center",gap:12,padding:"14px 18px",cursor:"pointer",background:"#F8FAFC"}} onMouseEnter={e=>e.currentTarget.style.background="#F0F4F8"} onMouseLeave={e=>e.currentTarget.style.background="#F8FAFC"}>
@@ -389,9 +393,9 @@ function TeamsView({onCard,searchTerm}){
                   const dcolor=dc(dept);
                   const key=leader.id+":"+dept;
                   const leaderHit=matchesQ(leader);
-                  const allDeptPeople=getDeptPeople(leader.id,dept).filter(e=>e.id!==leader.id).filter(e=>leaderHit||matchesQ(e));
-                  if(q&&allDeptPeople.length===0)return null;
-                  const isExp=q?true:expandedDepts.has(key);
+                  const allDeptPeople=getDeptPeople(leader.id,dept).filter(e=>e.id!==leader.id).filter(e=>typeOK(e)&&(leaderHit||matchesQ(e)));
+                  if((q||typeFilter)&&allDeptPeople.length===0)return null;
+                  const isExp=(q||typeFilter||deptFilter)?true:expandedDepts.has(key);
                   const ftes=allDeptPeople.filter(e=>!e.contractor&&!e.tbh&&!e.group&&!e.wgu);
                   const openRoles=allDeptPeople.filter(e=>e.tbh);
                   const contractors=allDeptPeople.filter(e=>e.contractor);
@@ -595,7 +599,7 @@ function App(){
             </div>
           </div>
         ):view==="teams"?(
-          <div style={{height:"100%",overflowY:"auto"}}><TeamsView onCard={onCard} searchTerm={searchTerm}/></div>
+          <div style={{height:"100%",overflowY:"auto"}}><TeamsView onCard={onCard} searchTerm={searchTerm} activeDept={activeDept}/></div>
         ):(
           <div style={{height:"100%",overflowY:"auto"}}><ListView onSelect={onCard} activeDept={activeDept} searchTerm={searchTerm}/></div>
         )}
