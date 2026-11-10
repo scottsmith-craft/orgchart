@@ -21,7 +21,7 @@
 <script type="text/babel">
 const{useState,useRef,useCallback,useEffect}=React;
 const BRAND={navy:"#002855",blue:"#0070F0",lime:"#97E152",sky:"#46B1EF",gray:"#E3E3E3",white:"#FFFFFF",canvas:"#FFFFFF",textMuted:"#6B7A90"};
-const DEPT_COLORS={"Central Office":"#002855","Executive Leadership":"#002855","Product & Technology":"#16A34A","Product Management":"#84CC16","Technology":"#166534","Business Operations":"#A855F7","Craft Intelligence":"#1D4ED8","Customer Success":"#0D9488","Partnership Development":"#E11D48","Workforce Partnership":"#FBBF24","Instructional Innovation":"#0891B2","Instructional Innovation & Apprenticeship Design":"#0891B2","Workforce & WIOA":"#2DD4BF","Craft Consulting":"#134E4A","Academic Programs":"#D97706","Marketing":"#BE123C","Solution Engineering":"#F97316","People & Talent":"#475569","Finance":"#6B9FD4","Legal":"#4A235A","WGU":"#46B1EF"};
+const DEPT_COLORS={"Central Office":"#002855","Executive Leadership":"#002855","Product & Technology":"#16A34A","Product Management":"#84CC16","Technology":"#166534","Business Operations":"#A855F7","Craft Intelligence":"#1D4ED8","Customer Success":"#0D9488","Partnership Development":"#E11D48","Workforce Partnership":"#FBBF24","Instructional Innovation":"#06B6D4","Instructional Innovation & Apprenticeship Design":"#06B6D4","Workforce & WIOA":"#34D399","Craft Consulting":"#134E4A","Academic Programs":"#D97706","Business Development":"#047857","Marketing":"#0E7490","Solution Engineering":"#F97316","People & Talent":"#475569","Finance":"#6B9FD4","Legal":"#4A235A","WGU":"#46B1EF"};
 const dc=d=>DEPT_COLORS[d]||BRAND.textMuted;
 
 const WGU_INFO={
@@ -125,20 +125,20 @@ const TREE={
   84:{name:"Mamie Williams",title:"Nursing Pathway Development Advisor",dept:"Craft Consulting",loc:"Nashville Office",tz:"CT",flags:{team:"Craft Consulting",},children:[]},
   85:{name:"Michelle Jewett",title:"Apprenticeship Program Development Advisor",dept:"Craft Consulting",loc:"Remote",tz:"MT",flags:{team:"Craft Consulting",},children:[]},
   89:{name:"Dennis Williamson",title:"Manager, Workforce Partnership Development",dept:"Workforce & WIOA",loc:"Remote",tz:"CT",flags:{team:"Workforce",sortOverride:"rank2"},children:[]},
-  90:{name:"Jenn Mathis",title:"Senior Manager, Technical Partnerships",dept:"Customer Success",loc:"Remote",tz:"ET",flags:{team:"Customer Success",sortOverride:"rank6"},children:[109]},
+  90:{name:"Jenn Mathis",title:"Senior Manager, Technical Partnerships",dept:"Business Development",loc:"Remote",tz:"ET",flags:{team:"Business Development",sortOverride:"rank6"},children:[109]},
   91:{name:"Karen Riddell",title:"Senior Technical Sales Engineer",dept:"Product & Technology",loc:"Nashville Office",tz:"CT",flags:{team:"Product & Technology",sortOverride:"rank3"},children:[]},
-  92:{name:"Scott Smith",title:"Senior Manager, Technical Marketing",dept:"Customer Success",loc:"Remote",tz:"ET",flags:{team:"Customer Success",sortOverride:"rank4"},children:[113,114]},
+  92:{name:"Scott Smith",title:"Senior Manager, Technical Marketing",dept:"Marketing",loc:"Remote",tz:"ET",flags:{team:"Marketing",sortOverride:"rank4"},children:[113,114]},
   93:{name:"Chloe Sun",title:"Lead Customer Success Coordinator",dept:"Customer Success",loc:"Remote",tz:"ET",flags:{team:"Customer Success",},children:[]},
   98:{name:"Raven Harris",title:"Workforce Partnerships & Operations Lead",dept:"Instructional Innovation",loc:"Remote",tz:"CT",flags:{team:"Instructional Innovation",},children:[]},
   99:{name:"Teryn Bryant",title:"Workforce Research & Implementation Lead",dept:"Instructional Innovation",loc:"Remote",tz:"CT",flags:{team:"Instructional Innovation",},children:[]},
   102:{name:"Addison Watson",title:"Senior Manager, Customer Onboarding & Implementation",dept:"Customer Success",loc:"Remote",tz:"CT",flags:{team:"Customer Success",sortOverride:"rank2"},children:[93,154]},
   103:{name:"Geralyn Smith",title:"Research Analyst",dept:"Workforce & WIOA",loc:"Remote",tz:"CT",flags:{team:"Workforce",},children:[]},
-  109:{name:"Adam Marinelli",title:"Regional Workforce Development Board Manager",dept:"Customer Success",loc:"Remote",tz:"ET",flags:{team:"Customer Success",sortOverride:"rank5"},children:[]},
-  113:{name:"Manoj Kumar Reddy Kondreddygari",title:"Marketing Associate",dept:"Customer Success",loc:"Nashville Office",tz:"CT",flags:{team:"Customer Success",},children:[]},
+  109:{name:"Adam Marinelli",title:"Regional Workforce Development Board Manager",dept:"Business Development",loc:"Remote",tz:"ET",flags:{team:"Business Development",sortOverride:"rank5"},children:[]},
+  113:{name:"Manoj Kumar Reddy Kondreddygari",title:"Marketing Associate",dept:"Marketing",loc:"Nashville Office",tz:"CT",flags:{team:"Marketing",},children:[]},
   62:{name:"Michael Arnold",title:"Staff Data Engineer",dept:"Engineering",loc:"Nashville Office",tz:"CT",flags:{team:"Engineering",},children:[]},
   121:{name:"Stefany De Sousa",title:"Contractor (Try Catch)",dept:"Engineering",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
   115:{name:"Edison Zuluaga",title:"Contractor (Try Catch)",dept:"Engineering",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
-  114:{name:"Samantha Lenger",title:"Contractor (Saturday Media)",dept:"Customer Success",loc:"Remote",tz:"ET",flags:{contractor:true},children:[]},
+  114:{name:"Samantha Lenger",title:"Contractor (Saturday Media)",dept:"Marketing",loc:"Remote",tz:"ET",flags:{contractor:true},children:[]},
   122:{name:"Kate Hansen",title:"Contractor (Base Two)",dept:"Engineering",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
   124:{name:"Drew Miller",title:"Contractor (Base Two)",dept:"Engineering",loc:"Remote",tz:"",flags:{contractor:true},children:[]},
   128:{name:"Eric McGee",title:"Senior Manager, Engineering",dept:"Engineering",loc:"Nashville Office",tz:"CT",flags:{team:"Engineering",},children:[44,45,48,49,57,58,59,61,62,129,146,115,121,149,140,122,124,217]},
@@ -191,7 +191,7 @@ const craftRoot=byId["10"];
 const craftEmps=employees.filter(e=>!e.wgu);
 const isFTE=e=>!e.wgu&&!e.group&&!e.contractor&&!e.tbh;
 const HIDDEN_DEPTS=new Set(["Grant Administration","Executive Leadership","WGU"]);
-const usedDepts=["All","Central Office","Academic Programs","Business Operations","Craft Consulting","Customer Success","Engineering","Instructional Innovation","Product & Technology","Product Management","Workforce & WIOA","WGU","Contractors","Craft FTEs","Open Roles"];
+const usedDepts=["All","Central Office","Academic Programs","Business Development","Business Operations","Craft Consulting","Customer Success","Engineering","Instructional Innovation","Marketing","Product & Technology","Product Management","Workforce & WIOA","WGU","Contractors","Craft FTEs","Open Roles"];
 
 function Logo(){return(<div style={{width:36,height:36,background:"#fff",borderRadius:8,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}><svg viewBox="0 0 120 110" width="34" height="34" xmlns="http://www.w3.org/2000/svg"><line x1="60" y1="36" x2="60" y2="22" stroke="#C8D5E0" strokeWidth="3.5"/><line x1="60" y1="72" x2="60" y2="86" stroke="#C8D5E0" strokeWidth="3.5"/><line x1="36" y1="54" x2="22" y2="54" stroke="#C8D5E0" strokeWidth="3.5"/><line x1="84" y1="54" x2="98" y2="54" stroke="#C8D5E0" strokeWidth="3.5"/><line x1="80" y1="36" x2="92" y2="18" stroke="#C8D5E0" strokeWidth="3"/><line x1="40" y1="72" x2="28" y2="88" stroke="#C8D5E0" strokeWidth="3"/><rect x="36" y="36" width="48" height="36" rx="9" fill="#002855"/><rect x="42" y="2" width="36" height="22" rx="7" fill="#46B1EF"/><rect x="42" y="86" width="36" height="22" rx="7" fill="#46B1EF"/><rect x="0" y="38" width="24" height="32" rx="7" fill="#0070F0"/><rect x="96" y="38" width="24" height="32" rx="7" fill="#0070F0"/><rect x="88" y="2" width="22" height="20" rx="6" fill="#97E152"/><rect x="10" y="86" width="22" height="20" rx="6" fill="#97E152"/></svg></div>);}
 
@@ -290,7 +290,7 @@ function TeamsView({onCard,searchTerm,activeDept}){
 
   const seniorLeaders=[byId["18"],byId["22"],byId["19"],byId["152"],byId["20"]].filter(Boolean);
 
-  const deptOrder=["Central Office","Academic Programs","Business Operations","Craft Consulting","Craft Insights","Customer Success","Engineering","Instructional Innovation","Product & Technology","Product Management","Workforce & WIOA"];
+  const deptOrder=["Central Office","Academic Programs","Business Development","Business Operations","Craft Consulting","Craft Insights","Customer Success","Engineering","Instructional Innovation","Marketing","Product & Technology","Product Management","Workforce & WIOA"];
 
   function getSubtreeDepts(empId,visited=new Set()){
     if(visited.has(empId))return new Set();
